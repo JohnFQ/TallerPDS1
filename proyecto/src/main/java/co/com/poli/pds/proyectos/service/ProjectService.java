@@ -15,6 +15,10 @@ import co.com.poli.pds.proyectos.entity.Project;
 public interface ProjectService {
 
 	ResponseEntity<Project> createProject(Project newProject);
-		
 	List<Project> viewProject();
+	void save(Project product);
+    void delete(Project product);
+    List<Project> findAll();
+    Project findById(Long id);
+	
 }

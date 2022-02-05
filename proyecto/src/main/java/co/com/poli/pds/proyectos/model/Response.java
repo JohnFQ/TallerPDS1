@@ -15,14 +15,16 @@ public class Response {
 	private Integer code;
 	private Boolean status;
 	private String message;
+	private Object data;
 	
 	public Response() {
 		
 	}
 	
-	public Response(Integer code, Boolean status, String message ) {
+	public Response(Integer code, Boolean status, String message, Object data ) {
 		this.status = status;
 		this.message = message;
+		this.data = data;
 	}
 	
 	

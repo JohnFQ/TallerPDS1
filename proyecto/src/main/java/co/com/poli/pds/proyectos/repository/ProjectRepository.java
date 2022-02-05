@@ -9,3 +9,5 @@ import co.com.poli.pds.proyectos.entity.Project;
 public interface ProjectRepository extends JpaRepository<Project, Long> {
 
 }
+
+

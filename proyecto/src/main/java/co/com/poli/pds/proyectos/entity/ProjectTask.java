@@ -8,8 +8,11 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
-
+@Getter
+@Setter
 @Entity
 @Table(name = "projectTask")
 public class ProjectTask {
@@ -68,66 +71,6 @@ public class ProjectTask {
 		this.backLog = backLog;
 	}
 	
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getSumary() {
-		return sumary;
-	}
-	public void setSumary(String sumary) {
-		this.sumary = sumary;
-	}
-	public String getStatus() {
-		return status;
-	}
-	public void setStatus(String status) {
-		this.status = status;
-	}
-	public Integer getPriority() {
-		return priority;
-	}
-	public void setPriority(Integer priority) {
-		this.priority = priority;
-	}
-	public Double getHours() {
-		return hours;
-	}
-	public void setHours(Double hours) {
-		this.hours = hours;
-	}
-	public Date getStartDate() {
-		return startDate;
-	}
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-	public Date getEndDate() {
-		return endDate;
-	}
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
-	public String getProjectIdentifier() {
-		return projectIdentifier;
-	}
-	public void setProjectIdentifier(String projectIdentifier) {
-		this.projectIdentifier = projectIdentifier;
-	}
-	public BackLog getBackLog() {
-		return backLog;
-	}
-	public void setBackLog(BackLog backLog) {
-		this.backLog = backLog;
-	}
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);

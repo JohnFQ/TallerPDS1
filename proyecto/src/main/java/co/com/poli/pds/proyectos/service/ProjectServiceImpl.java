@@ -27,7 +27,6 @@ public class ProjectServiceImpl implements ProjectService {
 	private ProjectRepository projectRepository;
 
 	@Override
-	@PostMapping
 	@Transactional(rollbackFor = Exception.class)
 	public ResponseEntity<Project> createProject(@RequestBody Project newProject) {
 		if(!this.verificarIngesta(newProject)) {
@@ -38,7 +37,6 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
-	@GetMapping
 	@Transactional(readOnly = true)
 	public List<Project> viewProject() {
 		return projectRepository.findAll();
@@ -51,5 +49,29 @@ public class ProjectServiceImpl implements ProjectService {
 			return true;
 		}	
 	}
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void save(Project project) {
+    	projectRepository.save(project);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void delete(Project project) {
+    	projectRepository.delete(project);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Project> findAll() {
+        return projectRepository.findAll();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Project findById(Long id) {
+        return projectRepository.findById(id).orElse(null);
+    }
 	
 }
