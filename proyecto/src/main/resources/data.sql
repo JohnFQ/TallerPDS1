@@ -1,4 +1,4 @@
-INSERT INTO projects VALUES (1,'Proyecto1','PPI','pruebaPPI','2008-01-01 00:00:01','2010-01-01 00:00:01');
+INSERT INTO projects VALUES (1,'Proyecto1',null ,'pruebaPPI','2008-01-01 00:00:01','2010-01-01 00:00:01');
 
 INSERT INTO backlogs (id, identifier, project_id) VALUES (1, 1, 1);
 

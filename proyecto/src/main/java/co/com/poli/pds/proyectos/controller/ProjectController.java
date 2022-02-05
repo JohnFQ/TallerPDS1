@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,12 +30,17 @@ public class ProjectController {
 	private final ResponseBuilder builder;
 
 	@PostMapping
-	public Response save(@Validated @RequestBody Project project, BindingResult result) {
-		if (result.hasErrors()) {
-			return builder.failed(formatMessage(result));
+	public ResponseEntity<Project> save(@Validated @RequestBody Project project, BindingResult result) {
+		
+		if (result.hasErrors() || !verificarIngesta(project)) {
+			return new ResponseEntity<Project>(HttpStatus.BAD_REQUEST);
+			//return builder.failed(formatMessage(result));
+		}else {
+			projectService.save(project);
+			return new ResponseEntity<Project>(HttpStatus.CREATED);
+			//return builder.success(project);
 		}
-		projectService.save(project);
-		return builder.success(project);
+		
 	}
 
 	private List<Map<String, String>> formatMessage(BindingResult result) {
@@ -44,5 +51,14 @@ public class ProjectController {
 		}).collect(Collectors.toList());
 		return errors;
 	}
-
+	
+	
+	private boolean verificarIngesta(Project newProject) {
+		System.out.println(newProject.getProjectIdentifier());
+		if(newProject.getProjectName() == "" || newProject.getProjectIdentifier() == "" || newProject.getDescription() == "") {
+			return false; 
+		}else {
+			return true;
+		}	
+	}
 }

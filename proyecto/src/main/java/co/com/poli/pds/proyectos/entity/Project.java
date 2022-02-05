@@ -5,6 +5,8 @@ import java.util.Objects;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 @Table(name = "projects")
 public class Project {
@@ -25,9 +27,11 @@ public class Project {
 	private String description;
 	
 	@Column(name = "startDate")
+	@JsonFormat(pattern="yyyy-MM-dd' 'HH:mm:ss")
 	private Date startDate;
 	
 	@Column(name = "endDate")
+	@JsonFormat(pattern="yyyy-MM-dd' 'HH:mm:ss")
 	private Date endDate;
 	
 
