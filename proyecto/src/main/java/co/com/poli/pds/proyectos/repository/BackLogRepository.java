@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import co.com.poli.pds.proyectos.entity.BackLog;
 
-@Repository
+@Repository("iBackLogRepository")
 public interface BackLogRepository extends JpaRepository<BackLog, Long>{
 
 }

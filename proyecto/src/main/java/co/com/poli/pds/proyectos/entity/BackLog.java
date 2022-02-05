@@ -6,7 +6,11 @@ import java.util.Objects;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "backlogs")
 public class BackLog {
@@ -28,18 +32,7 @@ public class BackLog {
 	@OneToMany(mappedBy = "backLog", cascade = CascadeType.REMOVE)
 	private List<ProjectTask> projectTask;
 	
-	public String getIdentifier() {
-		return identifier;
-	}
-	public void setIdentifier(String identifier) {
-		this.identifier = identifier;
-	}
-	public List<ProjectTask> getProjectTask() {
-		return projectTask;
-	}
-	public void setProjectTask(List<ProjectTask> projectTask) {
-		this.projectTask = projectTask;
-	}
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);

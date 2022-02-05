@@ -7,7 +7,9 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
- 
+import lombok.Builder;
+
+
 @Entity
 @Table(name = "projectTask")
 public class ProjectTask {
@@ -50,6 +52,21 @@ public class ProjectTask {
 	@JoinColumn(name=" backLog_id")
 	private BackLog backLog;
 	
+	
+	
+	public ProjectTask(String name, String sumary, String acceptanceCriteria, String status, Integer priority,
+			Double hours, Date startDate, Date endDate, String projectIdentifier, BackLog backLog) {
+		this.name = name;
+		this.sumary = sumary;
+		this.acceptanceCriteria = acceptanceCriteria;
+		this.status = status;
+		this.priority = priority;
+		this.hours = hours;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.projectIdentifier = projectIdentifier;
+		this.backLog = backLog;
+	}
 	
 	public Long getId() {
 		return id;

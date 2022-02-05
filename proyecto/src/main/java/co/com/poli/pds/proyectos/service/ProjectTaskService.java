@@ -2,17 +2,19 @@ package co.com.poli.pds.proyectos.service;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
+
 import co.com.poli.pds.proyectos.entity.ProjectTask;
 
 public interface ProjectTaskService {
 	
-	ProjectTask createTask(ProjectTask newTask);
+	ResponseEntity<ProjectTask> createTask(ProjectTask newTask);
 	
-	List<ProjectTask> viewAllTaskProject(int projectIdentifier);
+	List<ProjectTask> viewAllTaskProject(Integer projectIdentifier);
 	
-	int allHoursProject(int projectIdentifier);
+	Double allHoursProject(String projectIdentifier);
 	
-	int AllHoursxStatus(int projectIdentifier, String status);
+	Double AllHoursxStatus(String projectIdentifier, String status);
 	
-	boolean changeStatusTask(int idTask, int projectIdentifier);
+	ResponseEntity<ProjectTask> changeStatusTask(Long idTask, String projectIdentifier);
 }

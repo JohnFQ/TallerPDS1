@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import co.com.poli.pds.proyectos.entity.Project;
 
-@Repository
+@Repository("iProjectRepository")
 public interface ProjectRepository extends JpaRepository<Project, Long> {
 
 }
