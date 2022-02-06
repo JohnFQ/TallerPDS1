@@ -14,8 +14,6 @@ import co.com.poli.pds.proyectos.entity.Project;
 @CrossOrigin //Para manejar las solicitudes cruzadas que provienen del navegador del cliente
 public interface ProjectService {
 
-	ResponseEntity<Project> createProject(Project newProject);
-	List<Project> viewProject();
 	void save(Project product);
     void delete(Project product);
     List<Project> findAll();

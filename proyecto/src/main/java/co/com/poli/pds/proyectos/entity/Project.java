@@ -7,6 +7,11 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
 @Entity
 @Table(name = "projects")
 public class Project {
@@ -26,62 +31,18 @@ public class Project {
 	@Column(name = "description")
 	private String description;
 	
-	@Column(name = "startDate")
 	@JsonFormat(pattern="yyyy-MM-dd' 'HH:mm:ss")
+	@Column(name = "startDate")
 	private Date startDate;
 	
-	@Column(name = "endDate")
 	@JsonFormat(pattern="yyyy-MM-dd' 'HH:mm:ss")
+	@Column(name = "endDate")
 	private Date endDate;
 	
 
 	@OneToOne(mappedBy = "project", cascade = CascadeType.PERSIST)
 	private BackLog backLog;
 	
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public String getProjectName() {
-		return projectName;
-	}
-	public void setProjectName(String projectName) {
-		this.projectName = projectName;
-	}
-	public String getProjectIdentifier() {
-		return projectIdentifier;
-	}
-	public void setProjectIdentifier(String projectIdentifier) {
-		this.projectIdentifier = projectIdentifier;
-	}
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	public Date getStartDate() {
-		return startDate;
-	}
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-	public Date getEndDate() {
-		return endDate;
-	}
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
-	/*
-	public BackLog getBackLog() {
-		return backLog;
-	}
-	public void setBackLog(BackLog backLog) {
-		this.backLog = backLog;
-	}
-	*/
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);

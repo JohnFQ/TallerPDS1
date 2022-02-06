@@ -1,6 +1,7 @@
 package co.com.poli.pds.proyectos.helper;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -17,9 +18,8 @@ public class ResponseBuilder {
 
     public Response success(){
         return Response.builder()
-                .code(OK.value())
-                .status(true)
-                .message("Proceso realizado con exito")
+                .statusCode(OK.value())
+                .message(CREATED.value() + " " + HttpStatus.CREATED.name())
                 .data(OK.value())
                 .build();
     }
@@ -27,17 +27,15 @@ public class ResponseBuilder {
     public Response success(Object data){
     	
         return Response.builder()
-        		.code(CREATED.value())
-                .status(true)
-                .message("Proceso realizado con exito")
+        		.statusCode(CREATED.value())
+                .message(CREATED.value() + " " + HttpStatus.CREATED.name())
                 .data(data)
                 .build();
     }
     public Response failed(Object data){
         return Response.builder()
-                .code(HttpStatus.BAD_REQUEST.value())
-                .status(false)
-                .message("Error al realizar el proceso")
+                .statusCode(BAD_REQUEST.value())
+                .message(BAD_REQUEST.value() +" " + HttpStatus.BAD_REQUEST.name())
                 .data(data)
                 .build();
     }

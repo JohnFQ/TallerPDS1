@@ -1,4 +1,4 @@
-package co.com.poli.pds.proyectos.repository;
+ package co.com.poli.pds.proyectos.repository;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,20 +1,16 @@
 package co.com.poli.pds.proyectos.controller;
 
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
 import co.com.poli.pds.proyectos.entity.Project;
 import co.com.poli.pds.proyectos.helper.ResponseBuilder;
 import co.com.poli.pds.proyectos.model.Response;
@@ -30,17 +26,22 @@ public class ProjectController {
 	private final ResponseBuilder builder;
 
 	@PostMapping
-	public ResponseEntity<Project> save(@Validated @RequestBody Project project, BindingResult result) {
-		
+	public Response save(@Validated @RequestBody Project project, BindingResult result) {
+
 		if (result.hasErrors() || !verificarIngesta(project)) {
-			return new ResponseEntity<Project>(HttpStatus.BAD_REQUEST);
-			//return builder.failed(formatMessage(result));
-		}else {
+			return builder.failed(formatMessage(result));
+		} else {
+			List<Project> projectsAll = projectService.findAll();
+			for (Project projectValid : projectsAll) {
+				if (projectValid.getProjectIdentifier().toUpperCase().equals(project.getProjectIdentifier().toUpperCase())
+						|| projectValid.getProjectName().toUpperCase().equals(project.getProjectName().toUpperCase())) {
+					return builder.failed(formatMessage(result));
+				}
+			}
 			projectService.save(project);
-			return new ResponseEntity<Project>(HttpStatus.CREATED);
-			//return builder.success(project);
+			return builder.success(project);
 		}
-		
+
 	}
 
 	private List<Map<String, String>> formatMessage(BindingResult result) {
@@ -51,14 +52,14 @@ public class ProjectController {
 		}).collect(Collectors.toList());
 		return errors;
 	}
-	
-	
+
 	private boolean verificarIngesta(Project newProject) {
 		System.out.println(newProject.getProjectIdentifier());
-		if(newProject.getProjectName() == "" || newProject.getProjectIdentifier() == "" || newProject.getDescription() == "") {
-			return false; 
-		}else {
+		if (newProject.getProjectName() == "" || newProject.getProjectIdentifier() == ""
+				|| newProject.getDescription() == "") {
+			return false;
+		} else {
 			return true;
-		}	
+		}
 	}
 }
