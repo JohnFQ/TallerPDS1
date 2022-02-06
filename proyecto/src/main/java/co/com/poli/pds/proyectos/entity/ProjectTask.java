@@ -6,6 +6,7 @@ import java.util.Objects;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -41,9 +42,11 @@ public class ProjectTask {
 	@Column(name = "hours")
 	private Double hours;
 	
+	@JsonFormat(pattern="yyyy-MM-dd' 'HH:mm:ss")
 	@Column(name = "startDate")
 	private Date startDate;
 	
+	@JsonFormat(pattern="yyyy-MM-dd' 'HH:mm:ss")
 	@Column(name = "endDate")
 	private Date endDate;
 	

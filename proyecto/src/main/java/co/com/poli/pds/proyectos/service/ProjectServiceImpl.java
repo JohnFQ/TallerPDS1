@@ -25,31 +25,7 @@ public class ProjectServiceImpl implements ProjectService {
 	
 	@Autowired
 	private ProjectRepository projectRepository;
-
-	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public ResponseEntity<Project> createProject(@RequestBody Project newProject) {
-		if(!this.verificarIngesta(newProject)) {
-			return new ResponseEntity<Project>(HttpStatus.BAD_REQUEST);
-		}else {
-			return new ResponseEntity<Project>(projectRepository.save(newProject), HttpStatus.CREATED);
-		}
-	}
-
-	@Override
-	@Transactional(readOnly = true)
-	public List<Project> viewProject() {
-		return projectRepository.findAll();
-	}
 	
-	private boolean verificarIngesta(Project newProject) {
-		if(newProject.getProjectName() == "" && newProject.getProjectIdentifier() == "" && newProject.getDescription() == "") {
-			return false; 
-		}else {
-			return true;
-		}	
-	}
-
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void save(Project project) {
