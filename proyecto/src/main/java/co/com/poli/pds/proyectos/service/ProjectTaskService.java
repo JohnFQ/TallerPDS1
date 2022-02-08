@@ -5,10 +5,11 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 
 import co.com.poli.pds.proyectos.entity.ProjectTask;
+import co.com.poli.pds.proyectos.model.Response;
 
 public interface ProjectTaskService {
 	
-	ResponseEntity<ProjectTask> createTask(ProjectTask newTask);
+	Response createTask(ProjectTask newTask);
 	
 	List<ProjectTask> viewAllTaskProject(Integer projectIdentifier);
 	
@@ -16,5 +17,5 @@ public interface ProjectTaskService {
 	
 	Double AllHoursxStatus(String projectIdentifier, String status);
 	
-	ResponseEntity<ProjectTask> changeStatusTask(Long idTask, String projectIdentifier);
+	Response changeStatusTask(Long idTask, String projectIdentifier);
 }

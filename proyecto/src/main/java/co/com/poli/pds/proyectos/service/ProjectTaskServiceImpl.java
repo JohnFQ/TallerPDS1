@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import co.com.poli.pds.proyectos.entity.BackLog;
 import co.com.poli.pds.proyectos.entity.ProjectTask;
+import co.com.poli.pds.proyectos.helper.ResponseBuilder;
+import co.com.poli.pds.proyectos.model.Response;
 import co.com.poli.pds.proyectos.repository.BackLogRepository;
 import co.com.poli.pds.proyectos.repository.ProjectTaskRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,10 @@ import lombok.RequiredArgsConstructor;
 @CrossOrigin //Para manejar las solicitudes cruzadas que provienen del navegador del cliente
 public class ProjectTaskServiceImpl implements ProjectTaskService{
 	
+	private  ProjectService projectService;
+	
+	private  ResponseBuilder builder;
+	
 	@Autowired
 	private ProjectTaskRepository projectTaskRepository;
 	
@@ -34,33 +40,30 @@ public class ProjectTaskServiceImpl implements ProjectTaskService{
 	private BackLogRepository backLogRepository;
 
 	@Override
-	@PostMapping
 	@Transactional(rollbackFor = Exception.class)
-	public ResponseEntity<ProjectTask> createTask(@RequestBody ProjectTask newTask) {
+	public Response createTask(@RequestBody ProjectTask newTask) {
 		if(this.verificarIngesta(newTask) && this.verificarStatus(newTask.getStatus())) {
-			return new ResponseEntity<ProjectTask>(projectTaskRepository.save(newTask), HttpStatus.CREATED);
+			projectTaskRepository.save(newTask);
+			return builder.success(newTask);
 		}else {
-			return new ResponseEntity<ProjectTask>(HttpStatus.BAD_REQUEST);
+			return builder.failed(newTask);
 		}
 	}
 
 	@Override
-	@GetMapping
 	public List<ProjectTask> viewAllTaskProject(Integer projectIdentifier) {
 		return projectTaskRepository.findAll();
 	}
 
 	@Override
-	@GetMapping(path = "/{idProjectIdentifier}")
-	public Double allHoursProject(@PathVariable ("idProjectIdentifier") String projectIdentifier) {
+	public Double allHoursProject(String projectIdentifier) {
 			//Optional<ProjectTask> hoursProject = projectTaskRepository.findById(projectIdentifier);
 			
 		return 0.0;
 	}
 
 	@Override
-	@GetMapping(path = "/{idProjectIdentifier}/{status}")
-	public Double AllHoursxStatus(@PathVariable ("idProjectIdentifier") String projectIdentifier, @PathVariable ("status") String status) {
+	public Double AllHoursxStatus(String projectIdentifier, @PathVariable ("status") String status) {
 		List<ProjectTask> projectTaskList = projectTaskRepository.findByProjectIdentifier(projectIdentifier);
 		if(this.verificarStatus(status) && status != "deleted") {
 			for(ProjectTask tasks : projectTaskList) {
@@ -73,15 +76,14 @@ public class ProjectTaskServiceImpl implements ProjectTaskService{
 	}
 
 	@Override
-	@PutMapping(path = "/{idTask}/{projectId}")
-	public ResponseEntity<ProjectTask> changeStatusTask(@PathVariable ("idTask") Long idTask,@PathVariable ("projectId") String projectIdentifier) {
+	public Response changeStatusTask(Long idTask,String projectIdentifier) {
 		Optional<ProjectTask> borradoLogico = projectTaskRepository.findById(idTask);
 		
 		if(borradoLogico.isPresent() && borradoLogico.get().getProjectIdentifier().equals(projectIdentifier)) {
 			borradoLogico.get().setStatus("deleted");
-			return new ResponseEntity<ProjectTask>(HttpStatus.OK);
+			return builder.success(borradoLogico);
 		}else {
-			return new ResponseEntity<ProjectTask>(HttpStatus.BAD_REQUEST);
+			return builder.failed(borradoLogico);
 		}
 	}
 	

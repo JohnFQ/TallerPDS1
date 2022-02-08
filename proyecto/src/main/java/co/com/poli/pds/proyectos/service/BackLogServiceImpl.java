@@ -33,7 +33,6 @@ public class BackLogServiceImpl implements BackLogService {
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public ResponseEntity<BackLog> createBackLog(BackLog newBackLog) {
-		Optional<BackLog> backLog = backLogRepository.findById(newBackLog.getId());
 		List<ProjectTask> tasks = newBackLog.getProjectTask();
 
 		newBackLog.setProjectTask(null);

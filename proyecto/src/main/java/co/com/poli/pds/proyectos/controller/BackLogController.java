@@ -23,6 +23,8 @@ public class BackLogController {
 	
 	@PostMapping
 	public Response createBackLog(@RequestBody BackLog newBackLog){
+		backLogService.createBackLog(newBackLog);
+		
 		return builder.success();
 	}
 }
