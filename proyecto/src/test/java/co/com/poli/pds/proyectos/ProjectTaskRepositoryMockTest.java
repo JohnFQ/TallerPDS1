@@ -35,5 +35,9 @@ public class ProjectTaskRepositoryMockTest {
 		List<ProjectTask> tasks = projectTaskRespository.findByProjectIdentifier(pTask.getProjectIdentifier());
 		
 		
+<<<<<<< HEAD
+=======
+		Assertions.assertThat(projects.size()).isEqualTo(0);
+>>>>>>> 2a2ec10 (Finalizacion del service de projectTask, ajustar su create y ajuste del test al repository)
 	}
 }

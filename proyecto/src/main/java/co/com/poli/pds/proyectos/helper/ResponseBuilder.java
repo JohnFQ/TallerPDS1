@@ -40,6 +40,20 @@ public class ResponseBuilder {
                 .build();
     }
     
+    public Response failedClean() {
+    	return Response.builder()
+                .statusCode(BAD_REQUEST.value())
+                .message(BAD_REQUEST.value() +" " + HttpStatus.BAD_REQUEST.name())
+                .build();
+    }
+    
+    public Response succes(Double valor) {
+    	return Response.builder()
+    					.statusCode(ACCEPTED.value())
+    					.message(HttpStatus.ACCEPTED.name() + " [" + "El total de horas es: " + valor + "]")
+    					.build();
+    }
+    
  
 
 }
