@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import co.com.poli.pds.proyectos.entity.BackLog;
+import co.com.poli.pds.proyectos.entity.Project;
 import co.com.poli.pds.proyectos.entity.ProjectTask;
 import co.com.poli.pds.proyectos.repository.BackLogRepository;
 import co.com.poli.pds.proyectos.repository.ProjectTaskRepository;
@@ -31,28 +32,29 @@ public class BackLogServiceImpl implements BackLogService {
 	private ProjectTaskRepository projectTaskRepository;
 
 	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public ResponseEntity<BackLog> createBackLog(BackLog newBackLog) {
-		Optional<BackLog> backLog = backLogRepository.findById(newBackLog.getId());
-		List<ProjectTask> tasks = newBackLog.getProjectTask();
+    @Transactional(rollbackFor = Exception.class)
+    public void save(BackLog backlog) {
+		backLogRepository.save(backlog);
+    }
 
-		newBackLog.setProjectTask(null);
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void delete(BackLog backlog) {
+    	backLogRepository.delete(backlog);
+    }
 
-		for (ProjectTask task : tasks) {
-			task.setId(newBackLog.getId());
-		}
+    @Override
+    @Transactional(readOnly = true)
+    public List<BackLog> findAll() {
+        return backLogRepository.findAll();
+    }
 
-		projectTaskRepository.saveAll(tasks);
 
-		if (newBackLog.getIdentifier() == "") {
-			return new ResponseEntity<BackLog>(HttpStatus.BAD_REQUEST);
-		}
-		return new ResponseEntity<BackLog>(backLogRepository.save(newBackLog), HttpStatus.CREATED);
-	}
+    @Override
+    @Transactional(readOnly = true)
+    public BackLog findById(Long id) {
+        return backLogRepository.findById(id).orElse(null);
+    }
 
-	@Override
-	public List<BackLog> consultarBackLog() {
-		return backLogRepository.findAll();
-	}
-
+	
 }

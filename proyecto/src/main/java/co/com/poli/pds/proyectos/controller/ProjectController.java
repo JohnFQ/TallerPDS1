@@ -1,5 +1,6 @@
 package co.com.poli.pds.proyectos.controller;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +34,8 @@ public class ProjectController {
 		} else {
 			List<Project> projectsAll = projectService.findAll();
 			for (Project projectValid : projectsAll) {
-				if (projectValid.getProjectIdentifier().toUpperCase().equals(project.getProjectIdentifier().toUpperCase())
+				if (projectValid.getProjectIdentifier().toUpperCase()
+						.equals(project.getProjectIdentifier().toUpperCase())
 						|| projectValid.getProjectName().toUpperCase().equals(project.getProjectName().toUpperCase())) {
 					return builder.failed(formatMessage(result));
 				}
@@ -41,7 +43,15 @@ public class ProjectController {
 			projectService.save(project);
 			return builder.success(project);
 		}
+	}
 
+	@GetMapping
+	public Response findAll() {
+		List<Project> projects = projectService.findAll();
+		if (projects.isEmpty()) {
+			return builder.failed("No se cuenta con proyectos");
+		}
+		return builder.success(projects);
 	}
 
 	private List<Map<String, String>> formatMessage(BindingResult result) {
