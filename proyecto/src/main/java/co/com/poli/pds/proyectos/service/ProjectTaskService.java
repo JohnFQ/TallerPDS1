@@ -9,13 +9,15 @@ import co.com.poli.pds.proyectos.model.Response;
 
 public interface ProjectTaskService {
 	
-	Response createTask(ProjectTask newTask);
+	void createTask(ProjectTask newTask);
 	
-	List<ProjectTask> viewAllTaskProject(Integer projectIdentifier);
+	List<ProjectTask> viewAllTaskProject(String projectIdentifier);
 	
-	Double allHoursProject(String projectIdentifier);
+	Response allHoursProject(String projectIdentifier);
 	
-	Double AllHoursxStatus(String projectIdentifier, String status);
+	Response AllHoursxStatus(String projectIdentifier, String status);
 	
 	Response changeStatusTask(Long idTask, String projectIdentifier);
+	
+	List<ProjectTask> findAll(); 
 }

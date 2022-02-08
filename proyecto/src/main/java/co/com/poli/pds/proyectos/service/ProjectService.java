@@ -8,14 +8,15 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import co.com.poli.pds.proyectos.entity.Project;
+import co.com.poli.pds.proyectos.model.Response;
 
 @Service
 @RequestMapping("/project")
 @CrossOrigin //Para manejar las solicitudes cruzadas que provienen del navegador del cliente
 public interface ProjectService {
 
-	void save(Project product);
-    void delete(Project product);
+	Response save(Project product);
+    Response delete(Project product);
     List<Project> findAll();
     Project findById(Long id);
 	

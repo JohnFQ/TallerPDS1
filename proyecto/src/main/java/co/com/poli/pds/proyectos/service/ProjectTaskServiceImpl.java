@@ -29,53 +29,65 @@ import lombok.RequiredArgsConstructor;
 @CrossOrigin //Para manejar las solicitudes cruzadas que provienen del navegador del cliente
 public class ProjectTaskServiceImpl implements ProjectTaskService{
 	
-	private  ProjectService projectService;
 	
 	private  ResponseBuilder builder;
 	
 	@Autowired
 	private ProjectTaskRepository projectTaskRepository;
 	
-	@Autowired
-	private BackLogRepository backLogRepository;
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public Response createTask(@RequestBody ProjectTask newTask) {
-		if(this.verificarIngesta(newTask) && this.verificarStatus(newTask.getStatus())) {
+	public void createTask(@RequestBody ProjectTask newTask) {
 			projectTaskRepository.save(newTask);
-			return builder.success(newTask);
-		}else {
-			return builder.failed(newTask);
-		}
 	}
 
-	@Override
-	public List<ProjectTask> viewAllTaskProject(Integer projectIdentifier) {
-		return projectTaskRepository.findAll();
-	}
 
 	@Override
-	public Double allHoursProject(String projectIdentifier) {
-			//Optional<ProjectTask> hoursProject = projectTaskRepository.findById(projectIdentifier);
+	@Transactional(readOnly = true)
+	public Response allHoursProject(String projectIdentifier) {
+			List<ProjectTask> projects = projectTaskRepository.findByProjectIdentifier(projectIdentifier);
 			
-		return 0.0;
+			for(ProjectTask projectTaskIdentifier : projects) {
+				if(this.verificarStatus(projectTaskIdentifier.getStatus()) && projectTaskIdentifier.getStatus() != "deleted") {
+					Double contTasks = projectTaskIdentifier.getHours();
+					contTasks += contTasks;
+					return builder.succes(contTasks);
+				}
+			}
+			
+		return builder.failedClean();
 	}
 
 	@Override
-	public Double AllHoursxStatus(String projectIdentifier, @PathVariable ("status") String status) {
+	@Transactional(readOnly = true)
+	public Response AllHoursxStatus(String projectIdentifier, String status) {
 		List<ProjectTask> projectTaskList = projectTaskRepository.findByProjectIdentifier(projectIdentifier);
-		if(this.verificarStatus(status) && status != "deleted") {
+		
+		if(this.verificarStatus(status)) {
 			for(ProjectTask tasks : projectTaskList) {
 				Double contTasks = tasks.getHours();
 				contTasks += contTasks;
-				return contTasks;
+				return builder.succes(contTasks);
 			}
 		}
-		return 0.0;
+		return builder.failedClean();
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public List<ProjectTask> viewAllTaskProject(String projectIdentifier) {
+		return projectTaskRepository.findByProjectIdentifier(projectIdentifier);
 	}
 
 	@Override
+	@Transactional(readOnly = true)
+	public List<ProjectTask> findAll() {
+		return projectTaskRepository.findAll();
+	}
+	
+	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public Response changeStatusTask(Long idTask,String projectIdentifier) {
 		Optional<ProjectTask> borradoLogico = projectTaskRepository.findById(idTask);
 		
@@ -88,10 +100,10 @@ public class ProjectTaskServiceImpl implements ProjectTaskService{
 	}
 	
 	private boolean verificarIngesta(ProjectTask validate) {
-		if(validate.getName() == "" && validate.getProjectIdentifier() == "" && validate.getSumary() == "" &&
+		if(validate.getName() == "" || validate.getProjectIdentifier() == "" || validate.getSumary() == "" ||
 				validate.getStatus() == "") {
 			return false;
-		}else if(validate.getPriority()>= 1 && validate.getPriority() <= 5 && validate.getHours() >=1 && validate.getHours() <= 8){
+		}else if(validate.getPriority()>= 1 || validate.getPriority() <= 5 && validate.getHours() >=1 || validate.getHours() <= 8){
 			return true;
 		}else {
 			return false;

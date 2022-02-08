@@ -44,7 +44,7 @@ public class ProjectTaskRepositoryMockTest {
 										.build();
 		List<ProjectTask> projects = projectTaskRepository.findByProjectIdentifier(project.getProjectIdentifier());
 		
-		Assertions.assertThat(projects.size()).isEqualTo();
+		Assertions.assertThat(projects.size()).isEqualTo(0);
 	}
 	
 	/*

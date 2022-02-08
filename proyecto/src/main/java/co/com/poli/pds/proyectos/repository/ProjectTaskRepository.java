@@ -11,4 +11,6 @@ import co.com.poli.pds.proyectos.entity.ProjectTask;
 public interface ProjectTaskRepository extends JpaRepository<ProjectTask, Long> {
 	
 	List<ProjectTask> findByProjectIdentifier(String Ididentifier);
+	
+	
 }

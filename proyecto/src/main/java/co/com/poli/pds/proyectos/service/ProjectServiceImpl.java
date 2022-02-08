@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import co.com.poli.pds.proyectos.entity.Project;
+import co.com.poli.pds.proyectos.helper.ResponseBuilder;
+import co.com.poli.pds.proyectos.model.Response;
 import co.com.poli.pds.proyectos.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -23,19 +25,24 @@ import lombok.RequiredArgsConstructor;
 @CrossOrigin
 public class ProjectServiceImpl implements ProjectService {
 	
+	private  ResponseBuilder builder;
+	
 	@Autowired
 	private ProjectRepository projectRepository;
 	
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void save(Project project) {
+    public Response save(Project project) {
     	projectRepository.save(project);
+    	return builder.success(project);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void delete(Project project) {
+    public Response delete(Project project) {
     	projectRepository.delete(project);
+    	
+    	return builder.success(project);
     }
 
     @Override
