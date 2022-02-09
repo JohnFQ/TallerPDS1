@@ -15,9 +15,10 @@ import co.com.poli.pds.proyectos.model.Response;
 @CrossOrigin //Para manejar las solicitudes cruzadas que provienen del navegador del cliente
 public interface ProjectService {
 
-	Response save(Project product);
-    Response delete(Project product);
+	boolean save(Project product);
+    void delete(Project product);
     List<Project> findAll();
     Project findById(Long id);
+	boolean verificarIngesta(Project project);
 	
 }

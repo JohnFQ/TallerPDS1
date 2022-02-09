@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import co.com.poli.pds.proyectos.entity.Project;
 import co.com.poli.pds.proyectos.helper.ResponseBuilder;
 import co.com.poli.pds.proyectos.model.Response;
+import co.com.poli.pds.proyectos.repository.ProjectRepository;
 import co.com.poli.pds.proyectos.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 
@@ -24,34 +25,28 @@ import lombok.RequiredArgsConstructor;
 public class ProjectController {
 
 	private final ProjectService projectService;
+	private final ProjectRepository projectRepository;
 	private final ResponseBuilder builder;
 
 	@PostMapping
 	public Response save(@Validated @RequestBody Project project, BindingResult result) {
-
-		if (result.hasErrors() || !verificarIngesta(project)) {
+		boolean validProject = projectService.save(project);
+		System.out.print(validProject);
+		if (result.hasErrors() || !validProject) {
 			return builder.failed(formatMessage(result));
 		} else {
-			List<Project> projectsAll = projectService.findAll();
-			for (Project projectValid : projectsAll) {
-				if (projectValid.getProjectIdentifier().toUpperCase()
-						.equals(project.getProjectIdentifier().toUpperCase())
-						|| projectValid.getProjectName().toUpperCase().equals(project.getProjectName().toUpperCase())) {
-					return builder.failed(formatMessage(result));
-				}
-			}
-			projectService.save(project);
+			projectRepository.save(project);
 			return builder.success(project);
 		}
 	}
 
 	@GetMapping
 	public Response findAll() {
-		List<Project> projects = projectService.findAll();
-		if (projects.isEmpty()) {
-			return builder.failed("No se cuenta con proyectos");
+		List<Project> products = projectService.findAll();
+		if (products.isEmpty()) {
+			return builder.failed();
 		}
-		return builder.success(projects);
+		return builder.success(products);
 	}
 
 	private List<Map<String, String>> formatMessage(BindingResult result) {
@@ -61,15 +56,5 @@ public class ProjectController {
 			return error;
 		}).collect(Collectors.toList());
 		return errors;
-	}
-
-	private boolean verificarIngesta(Project newProject) {
-		System.out.println(newProject.getProjectIdentifier());
-		if (newProject.getProjectName() == "" || newProject.getProjectIdentifier() == ""
-				|| newProject.getDescription() == "") {
-			return false;
-		} else {
-			return true;
-		}
 	}
 }
