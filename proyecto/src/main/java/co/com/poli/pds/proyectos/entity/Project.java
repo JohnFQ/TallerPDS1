@@ -4,13 +4,8 @@ import java.util.Date;
 import java.util.Objects;
 
 import javax.persistence.*;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
-
-<<<<<<< HEAD
-=======
 import lombok.Builder;
->>>>>>> main
 import lombok.Getter;
 import lombok.Setter;
 

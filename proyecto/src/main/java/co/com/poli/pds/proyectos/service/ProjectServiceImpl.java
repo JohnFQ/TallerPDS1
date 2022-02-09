@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import co.com.poli.pds.proyectos.entity.Project;
-import co.com.poli.pds.proyectos.helper.ResponseBuilder;
-import co.com.poli.pds.proyectos.model.Response;
 import co.com.poli.pds.proyectos.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -16,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @CrossOrigin
 public class ProjectServiceImpl implements ProjectService {
-<<<<<<< HEAD
 
 	@Autowired
 	private ProjectRepository projectRepository;
@@ -56,28 +53,6 @@ public class ProjectServiceImpl implements ProjectService {
 	public Project findById(Long id) {
 		return projectRepository.findById(id).orElse(null);
 	}
-=======
-	
-	private  ResponseBuilder builder;
-	
-	@Autowired
-	private ProjectRepository projectRepository;
-	
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public Response save(Project project) {
-    	projectRepository.save(project);
-    	return builder.success(project);
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public Response delete(Project project) {
-    	projectRepository.delete(project);
-    	
-    	return builder.success(project);
-    }
->>>>>>> main
 
 	@Override
 	public boolean verificarIngesta(Project newProject) {

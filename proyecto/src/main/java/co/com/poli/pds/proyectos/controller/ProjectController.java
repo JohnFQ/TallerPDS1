@@ -1,9 +1,6 @@
 package co.com.poli.pds.proyectos.controller;
 
-<<<<<<< HEAD
 import org.springframework.web.bind.annotation.GetMapping;
-=======
->>>>>>> main
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +30,7 @@ public class ProjectController {
 
 	@PostMapping
 	public Response save(@Validated @RequestBody Project project, BindingResult result) {
-<<<<<<< HEAD
+
 		boolean validProject = projectService.save(project);
 		System.out.print(validProject);
 		if (result.hasErrors() || !validProject) {
@@ -51,23 +48,6 @@ public class ProjectController {
 			return builder.failed();
 		}
 		return builder.success(products);
-=======
-
-		if (result.hasErrors() || !verificarIngesta(project)) {
-			return builder.failed(formatMessage(result));
-		} else {
-			List<Project> projectsAll = projectService.findAll();
-			for (Project projectValid : projectsAll) {
-				if (projectValid.getProjectIdentifier().toUpperCase().equals(project.getProjectIdentifier().toUpperCase())
-						|| projectValid.getProjectName().toUpperCase().equals(project.getProjectName().toUpperCase())) {
-					return builder.failed(formatMessage(result));
-				}
-			}
-			projectService.save(project);
-			return builder.success(project);
-		}
-
->>>>>>> main
 	}
 
 	private List<Map<String, String>> formatMessage(BindingResult result) {
@@ -78,18 +58,4 @@ public class ProjectController {
 		}).collect(Collectors.toList());
 		return errors;
 	}
-<<<<<<< HEAD
 }
-=======
-
-	private boolean verificarIngesta(Project newProject) {
-		System.out.println(newProject.getProjectIdentifier());
-		if (newProject.getProjectName() == "" || newProject.getProjectIdentifier() == ""
-				|| newProject.getDescription() == "") {
-			return false;
-		} else {
-			return true;
-		}
-	}
-}
->>>>>>> main

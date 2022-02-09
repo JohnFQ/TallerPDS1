@@ -29,33 +29,15 @@ import lombok.RequiredArgsConstructor;
 @CrossOrigin //Para manejar las solicitudes cruzadas que provienen del navegador del cliente
 public class ProjectTaskServiceImpl implements ProjectTaskService{
 	
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 	
 	private  ResponseBuilder builder;
 	
->>>>>>> 2a2ec10 (Finalizacion del service de projectTask, ajustar su create y ajuste del test al repository)
-=======
-	
-	private  ResponseBuilder builder;
-	
->>>>>>> main
 	@Autowired
 	private ProjectTaskRepository projectTaskRepository;
 	
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-<<<<<<< HEAD
-<<<<<<< HEAD
-	public ResponseEntity<ProjectTask> createTask(@RequestBody ProjectTask newTask) {
-		if(this.verificarIngesta(newTask) && this.verificarStatus(newTask.getStatus())) {
-			return new ResponseEntity<ProjectTask>(projectTaskRepository.save(newTask), HttpStatus.CREATED);
-		}else {
-			return new ResponseEntity<ProjectTask>(HttpStatus.BAD_REQUEST);
-		}
-=======
 	public boolean createTask(ProjectTask newTask) {
 			if(this.verificarIngesta(newTask) && !this.verificarStatus(newTask.getStatus())) {
 				projectTaskRepository.save(newTask); 
@@ -63,64 +45,28 @@ public class ProjectTaskServiceImpl implements ProjectTaskService{
 			}else {
 				return false;
 			}
->>>>>>> main
 	}
 
 
 	@Override
-<<<<<<< HEAD
-	@GetMapping(path = "/{idProjectIdentifier}")
-	public Double allHoursProject(@PathVariable ("idProjectIdentifier") String projectIdentifier) {
-			//Optional<ProjectTask> hoursProject = projectTaskRepository.findById(projectIdentifier);
-=======
-	public void createTask(@RequestBody ProjectTask newTask) {
-			projectTaskRepository.save(newTask);
-	}
-
-
-	@Override
-	@Transactional(readOnly = true)
-	public Response allHoursProject(String projectIdentifier) {
-			List<ProjectTask> projects = projectTaskRepository.findByProjectIdentifier(projectIdentifier);
-			
-			for(ProjectTask projectTaskIdentifier : projects) {
-				if(this.verificarStatus(projectTaskIdentifier.getStatus()) && projectTaskIdentifier.getStatus() != "deleted") {
-					Double contTasks = projectTaskIdentifier.getHours();
-					contTasks += contTasks;
-					return builder.succes(contTasks);
-				}
-			}
->>>>>>> 2a2ec10 (Finalizacion del service de projectTask, ajustar su create y ajuste del test al repository)
-			
-		return builder.failedClean();
-	}
-
-	@Override
-<<<<<<< HEAD
-	@GetMapping(path = "/{idProjectIdentifier}/{status}")
-	public Double AllHoursxStatus(@PathVariable ("idProjectIdentifier") String projectIdentifier, @PathVariable ("status") String status) {
-=======
-	@Transactional(readOnly = true)
-	public Response AllHoursxStatus(String projectIdentifier, String status) {
->>>>>>> 2a2ec10 (Finalizacion del service de projectTask, ajustar su create y ajuste del test al repository)
-		List<ProjectTask> projectTaskList = projectTaskRepository.findByProjectIdentifier(projectIdentifier);
-		
-		if(this.verificarStatus(status)) {
-=======
 	@Transactional(readOnly = true)
 	public Double allHoursProject(String projectIdentifier) {
 			List<ProjectTask> projects = projectTaskRepository.findByProjectIdentifier(projectIdentifier);
 			Double contTasks = 0D, contFlag = 0D;
+			Double vectHours[];
+			vectHours = new Double[projects.size()];
+			
 			for(ProjectTask projectTaskIdentifier : projects) {
+				System.out.println(projects.size());
 				if(!this.verificarStatus(projectTaskIdentifier.getStatus()) && projectTaskIdentifier.getStatus() != "deleted") {
 					contTasks = projectTaskIdentifier.getHours();
-					
+					System.out.println(contTasks);
 				}
-				
+				contFlag = contTasks;
 			}
 				
 			
-			
+			System.out.println("contFlag" + contFlag);
 			
 		return contTasks;
 	}
@@ -131,18 +77,13 @@ public class ProjectTaskServiceImpl implements ProjectTaskService{
 		List<ProjectTask> projectTaskList = projectTaskRepository.findByProjectIdentifier(projectIdentifier);
 		Double contTasks = 0D;
 		if(!this.verificarStatus(status)) {
->>>>>>> main
 			for(ProjectTask tasks : projectTaskList) {
 				contTasks = tasks.getHours();
 				contTasks += contTasks;
-				return builder.succes(contTasks);
+				return contTasks;
 			}
 		}
-<<<<<<< HEAD
-		return builder.failedClean();
-=======
 		return contTasks;
->>>>>>> main
 	}
 	
 	@Override
@@ -152,13 +93,6 @@ public class ProjectTaskServiceImpl implements ProjectTaskService{
 	}
 
 	@Override
-<<<<<<< HEAD
-<<<<<<< HEAD
-	@PutMapping(path = "/{idTask}/{projectId}")
-	public ResponseEntity<ProjectTask> changeStatusTask(@PathVariable ("idTask") Long idTask,@PathVariable ("projectId") String projectIdentifier) {
-=======
-=======
->>>>>>> main
 	@Transactional(readOnly = true)
 	public List<ProjectTask> findAll() {
 		return projectTaskRepository.findAll();
@@ -167,10 +101,6 @@ public class ProjectTaskServiceImpl implements ProjectTaskService{
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public Response changeStatusTask(Long idTask,String projectIdentifier) {
-<<<<<<< HEAD
->>>>>>> 2a2ec10 (Finalizacion del service de projectTask, ajustar su create y ajuste del test al repository)
-=======
->>>>>>> main
 		Optional<ProjectTask> borradoLogico = projectTaskRepository.findById(idTask);
 		
 		if(borradoLogico.isPresent() && borradoLogico.get().getProjectIdentifier().equals(projectIdentifier)) {
