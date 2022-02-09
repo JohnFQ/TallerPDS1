@@ -16,6 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 import co.com.poli.pds.proyectos.entity.ProjectTask;
 import co.com.poli.pds.proyectos.helper.ResponseBuilder;
 import co.com.poli.pds.proyectos.model.Response;
+<<<<<<< HEAD
+=======
+import co.com.poli.pds.proyectos.repository.ProjectTaskRepository;
+>>>>>>> main
 import co.com.poli.pds.proyectos.service.ProjectTaskService;
 
 @RestController
@@ -26,6 +30,7 @@ public class ProjectTaskController {
 
 	@Autowired
 	private ProjectTaskService projectTaskService;
+<<<<<<< HEAD
 
 	@PostMapping
 	public Response createTask(@RequestBody ProjectTask newTask) {
@@ -41,10 +46,32 @@ public class ProjectTaskController {
 		 */
 	}
 
+=======
+	
+	@Autowired
+	private ProjectTaskRepository repository;
+
+	@PostMapping
+	public Response createTask(@RequestBody ProjectTask newTask) {
+		boolean flag = projectTaskService.createTask(newTask);
+		if(flag) {
+			return builder.success(newTask);
+		}else {
+			return builder.failed(newTask); 
+		}
+		
+	}
+	
+	@GetMapping("/identifier/{projectIdentifier}")
+	public List<ProjectTask> findAllProjectIdentifier(@PathVariable("projectIdentifier") String project){
+		return repository.findByProjectIdentifier(project);
+	}
+>>>>>>> main
 	@GetMapping
 	public List<ProjectTask> findAll() {
 		return projectTaskService.findAll();
 	}
+<<<<<<< HEAD
 
 	@GetMapping("/project/{projectIdentifier}")
 	public List<ProjectTask> viewAllTaskProject(@PathVariable("projectIdentifier") String projectIdentifier) {
@@ -64,12 +91,23 @@ public class ProjectTaskController {
 		}
 
 		return builder.failedClean();
+=======
+	
+	@GetMapping("hours/project/{projectIdentifier}")
+	public Double allHoursProject(@PathVariable("projectIdentifier") String projectIdentifier) {
+		return projectTaskService.allHoursProject(projectIdentifier);
+>>>>>>> main
 	}
 
 	@GetMapping("hours/project/{projectIdentifier}/{status}")
 	public Response AllHoursxStatus(@PathVariable("projectIdentifier") String projectIdentifier,
 			@PathVariable("status") String status) {
+<<<<<<< HEAD
 		return projectTaskService.AllHoursxStatus(projectIdentifier, status);
+=======
+		//return projectTaskService.AllHoursxStatus(projectIdentifier, status);}}
+		return null;
+>>>>>>> main
 	}
 
 	@PutMapping("/{idtask}/{projectIdentifier}")
@@ -87,6 +125,7 @@ public class ProjectTaskController {
 		return builder.failed(borradoLogico);
 	}
 
+<<<<<<< HEAD
 	private boolean verificarIngesta(ProjectTask validate) {
 		if (validate.getName() == "" || validate.getProjectIdentifier() == "" || validate.getSumary() == ""
 				|| validate.getStatus() == "") {
@@ -108,4 +147,6 @@ public class ProjectTaskController {
 		}
 	}
 
+=======
+>>>>>>> main
 }

@@ -6,6 +6,8 @@ import java.util.Objects;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +15,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "backlogs")
+@Builder
 public class BackLog {
 
 	@Id

@@ -7,6 +7,10 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+<<<<<<< HEAD
+=======
+import lombok.Builder;
+>>>>>>> main
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +18,7 @@ import lombok.Setter;
 @Getter
 @Entity
 @Table(name = "projects")
+@Builder
 public class Project {
 	
 	@Id

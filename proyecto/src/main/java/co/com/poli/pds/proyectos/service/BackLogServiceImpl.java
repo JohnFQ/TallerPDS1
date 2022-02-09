@@ -32,6 +32,7 @@ public class BackLogServiceImpl implements BackLogService {
 	private ProjectTaskRepository projectTaskRepository;
 
 	@Override
+<<<<<<< HEAD
     @Transactional(rollbackFor = Exception.class)
     public void save(BackLog backlog) {
 		backLogRepository.save(backlog);
@@ -57,4 +58,29 @@ public class BackLogServiceImpl implements BackLogService {
     }
 
 	
+=======
+	@Transactional(rollbackFor = Exception.class)
+	public ResponseEntity<BackLog> createBackLog(BackLog newBackLog) {
+		List<ProjectTask> tasks = newBackLog.getProjectTask();
+
+		newBackLog.setProjectTask(null);
+
+		for (ProjectTask task : tasks) {
+			task.setId(newBackLog.getId());
+		}
+
+		projectTaskRepository.saveAll(tasks);
+
+		if (newBackLog.getIdentifier() == "") {
+			return new ResponseEntity<BackLog>(HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<BackLog>(backLogRepository.save(newBackLog), HttpStatus.CREATED);
+	}
+
+	@Override
+	public List<BackLog> consultarBackLog() {
+		return backLogRepository.findAll();
+	}
+
+>>>>>>> main
 }

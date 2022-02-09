@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import co.com.poli.pds.proyectos.entity.BackLog;
 import co.com.poli.pds.proyectos.entity.ProjectTask;
+import co.com.poli.pds.proyectos.helper.ResponseBuilder;
+import co.com.poli.pds.proyectos.model.Response;
 import co.com.poli.pds.proyectos.repository.BackLogRepository;
 import co.com.poli.pds.proyectos.repository.ProjectTaskRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,18 +30,24 @@ import lombok.RequiredArgsConstructor;
 public class ProjectTaskServiceImpl implements ProjectTaskService{
 	
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 	
 	private  ResponseBuilder builder;
 	
 >>>>>>> 2a2ec10 (Finalizacion del service de projectTask, ajustar su create y ajuste del test al repository)
+=======
+	
+	private  ResponseBuilder builder;
+	
+>>>>>>> main
 	@Autowired
 	private ProjectTaskRepository projectTaskRepository;
 	
 
 	@Override
-	@PostMapping
 	@Transactional(rollbackFor = Exception.class)
+<<<<<<< HEAD
 <<<<<<< HEAD
 	public ResponseEntity<ProjectTask> createTask(@RequestBody ProjectTask newTask) {
 		if(this.verificarIngesta(newTask) && this.verificarStatus(newTask.getStatus())) {
@@ -47,15 +55,20 @@ public class ProjectTaskServiceImpl implements ProjectTaskService{
 		}else {
 			return new ResponseEntity<ProjectTask>(HttpStatus.BAD_REQUEST);
 		}
+=======
+	public boolean createTask(ProjectTask newTask) {
+			if(this.verificarIngesta(newTask) && !this.verificarStatus(newTask.getStatus())) {
+				projectTaskRepository.save(newTask); 
+				return true;
+			}else {
+				return false;
+			}
+>>>>>>> main
 	}
 
-	@Override
-	@GetMapping
-	public List<ProjectTask> viewAllTaskProject(Integer projectIdentifier) {
-		return projectTaskRepository.findAll();
-	}
 
 	@Override
+<<<<<<< HEAD
 	@GetMapping(path = "/{idProjectIdentifier}")
 	public Double allHoursProject(@PathVariable ("idProjectIdentifier") String projectIdentifier) {
 			//Optional<ProjectTask> hoursProject = projectTaskRepository.findById(projectIdentifier);
@@ -93,13 +106,43 @@ public class ProjectTaskServiceImpl implements ProjectTaskService{
 		List<ProjectTask> projectTaskList = projectTaskRepository.findByProjectIdentifier(projectIdentifier);
 		
 		if(this.verificarStatus(status)) {
+=======
+	@Transactional(readOnly = true)
+	public Double allHoursProject(String projectIdentifier) {
+			List<ProjectTask> projects = projectTaskRepository.findByProjectIdentifier(projectIdentifier);
+			Double contTasks = 0D, contFlag = 0D;
+			for(ProjectTask projectTaskIdentifier : projects) {
+				if(!this.verificarStatus(projectTaskIdentifier.getStatus()) && projectTaskIdentifier.getStatus() != "deleted") {
+					contTasks = projectTaskIdentifier.getHours();
+					
+				}
+				
+			}
+				
+			
+			
+			
+		return contTasks;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Double AllHoursxStatus(String projectIdentifier, String status) {
+		List<ProjectTask> projectTaskList = projectTaskRepository.findByProjectIdentifier(projectIdentifier);
+		Double contTasks = 0D;
+		if(!this.verificarStatus(status)) {
+>>>>>>> main
 			for(ProjectTask tasks : projectTaskList) {
-				Double contTasks = tasks.getHours();
+				contTasks = tasks.getHours();
 				contTasks += contTasks;
 				return builder.succes(contTasks);
 			}
 		}
+<<<<<<< HEAD
 		return builder.failedClean();
+=======
+		return contTasks;
+>>>>>>> main
 	}
 	
 	@Override
@@ -110,9 +153,12 @@ public class ProjectTaskServiceImpl implements ProjectTaskService{
 
 	@Override
 <<<<<<< HEAD
+<<<<<<< HEAD
 	@PutMapping(path = "/{idTask}/{projectId}")
 	public ResponseEntity<ProjectTask> changeStatusTask(@PathVariable ("idTask") Long idTask,@PathVariable ("projectId") String projectIdentifier) {
 =======
+=======
+>>>>>>> main
 	@Transactional(readOnly = true)
 	public List<ProjectTask> findAll() {
 		return projectTaskRepository.findAll();
@@ -121,14 +167,17 @@ public class ProjectTaskServiceImpl implements ProjectTaskService{
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public Response changeStatusTask(Long idTask,String projectIdentifier) {
+<<<<<<< HEAD
 >>>>>>> 2a2ec10 (Finalizacion del service de projectTask, ajustar su create y ajuste del test al repository)
+=======
+>>>>>>> main
 		Optional<ProjectTask> borradoLogico = projectTaskRepository.findById(idTask);
 		
 		if(borradoLogico.isPresent() && borradoLogico.get().getProjectIdentifier().equals(projectIdentifier)) {
 			borradoLogico.get().setStatus("deleted");
-			return new ResponseEntity<ProjectTask>(HttpStatus.OK);
+			return builder.success(borradoLogico);
 		}else {
-			return new ResponseEntity<ProjectTask>(HttpStatus.BAD_REQUEST);
+			return builder.failed(borradoLogico);
 		}
 	}
 	
