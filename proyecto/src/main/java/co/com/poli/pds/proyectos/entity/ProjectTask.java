@@ -60,7 +60,7 @@ public class ProjectTask {
 	
 	@JsonBackReference
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name=" backLog_id")
+	@JoinColumn(name="backLog_id")
 	private BackLog backLog;
 	
 	

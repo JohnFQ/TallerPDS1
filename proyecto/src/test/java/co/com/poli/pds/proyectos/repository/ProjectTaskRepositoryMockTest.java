@@ -1,17 +1,21 @@
-package co.com.poli.pds.proyectos;
+package co.com.poli.pds.proyectos.repository;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.Column;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -23,6 +27,7 @@ import co.com.poli.pds.proyectos.repository.BackLogRepository;
 import co.com.poli.pds.proyectos.repository.ProjectTaskRepository;
 
 @DataJpaTest
+@AutoConfigureTestDatabase(replace = Replace.NONE)
 public class ProjectTaskRepositoryMockTest {
 	
 	@Autowired
@@ -42,44 +47,10 @@ public class ProjectTaskRepositoryMockTest {
 										.projectIdentifier("PPI")
 										.backLog(BackLog.builder().id(1L).build())
 										.build();
-		List<ProjectTask> projects = projectTaskRepository.findByProjectIdentifier(project.getProjectIdentifier());
 		
-		Assertions.assertThat(projects.size()).isEqualTo(0);
+		List<ProjectTask> projectxIdentifier = projectTaskRepository.findByProjectIdentifier(project.getProjectIdentifier());
+		
+		Assertions.assertThat(projectxIdentifier.size()).isEqualTo(2);
 	}
 	
-	/*
-	 * @Column(name = "name")
-	private String name;
-	
-	@Column(name = "sumary")
-	private String sumary;
-	
-	@Column(name = "acceptanceCriteria")
-	private String acceptanceCriteria;
-	
-	@Column(name = "status")
-	private String status;
-	
-	@Column(name = "priority")
-	private Integer priority;
-	
-	@Column(name = "hours")
-	private Double hours;
-	
-	@JsonFormat(pattern="yyyy-MM-dd' 'HH:mm:ss")
-	@Column(name = "startDate")
-	private Date startDate;
-	
-	@JsonFormat(pattern="yyyy-MM-dd' 'HH:mm:ss")
-	@Column(name = "endDate")
-	private Date endDate;
-	
-	@Column(name = "projectIdentifier")
-	private String projectIdentifier;
-	
-	@JsonBackReference
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name=" backLog_id")
-	private BackLog backLog;
-	 */
 }

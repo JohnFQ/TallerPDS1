@@ -38,40 +38,48 @@ public class ProjectTaskServiceImpl implements ProjectTaskService{
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public void createTask(@RequestBody ProjectTask newTask) {
-			projectTaskRepository.save(newTask);
-	}
-
-
-	@Override
-	@Transactional(readOnly = true)
-	public Response allHoursProject(String projectIdentifier) {
-			List<ProjectTask> projects = projectTaskRepository.findByProjectIdentifier(projectIdentifier);
-			
-			for(ProjectTask projectTaskIdentifier : projects) {
-				if(this.verificarStatus(projectTaskIdentifier.getStatus()) && projectTaskIdentifier.getStatus() != "deleted") {
-					Double contTasks = projectTaskIdentifier.getHours();
-					contTasks += contTasks;
-					return builder.succes(contTasks);
-				}
+	public boolean createTask(ProjectTask newTask) {
+			if(this.verificarIngesta(newTask) && !this.verificarStatus(newTask.getStatus())) {
+				projectTaskRepository.save(newTask); 
+				return true;
+			}else {
+				return false;
 			}
+	}
+
+
+	@Override
+	@Transactional(readOnly = true)
+	public Double allHoursProject(String projectIdentifier) {
+			List<ProjectTask> projects = projectTaskRepository.findByProjectIdentifier(projectIdentifier);
+			Double contTasks = 0D, contFlag = 0D;
+			for(ProjectTask projectTaskIdentifier : projects) {
+				if(!this.verificarStatus(projectTaskIdentifier.getStatus()) && projectTaskIdentifier.getStatus() != "deleted") {
+					contTasks = projectTaskIdentifier.getHours();
+					
+				}
+				
+			}
+				
 			
-		return builder.failedClean();
+			
+			
+		return contTasks;
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public Response AllHoursxStatus(String projectIdentifier, String status) {
+	public Double AllHoursxStatus(String projectIdentifier, String status) {
 		List<ProjectTask> projectTaskList = projectTaskRepository.findByProjectIdentifier(projectIdentifier);
-		
-		if(this.verificarStatus(status)) {
+		Double contTasks = 0D;
+		if(!this.verificarStatus(status)) {
 			for(ProjectTask tasks : projectTaskList) {
-				Double contTasks = tasks.getHours();
+				contTasks = tasks.getHours();
 				contTasks += contTasks;
-				return builder.succes(contTasks);
+				return contTasks;
 			}
 		}
-		return builder.failedClean();
+		return contTasks;
 	}
 	
 	@Override
