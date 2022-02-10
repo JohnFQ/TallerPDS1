@@ -18,27 +18,24 @@ import co.com.poli.pds.proyectos.helper.ResponseBuilder;
 import co.com.poli.pds.proyectos.model.Response;
 import co.com.poli.pds.proyectos.repository.ProjectTaskRepository;
 import co.com.poli.pds.proyectos.service.ProjectTaskService;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/task")
+@RequiredArgsConstructor
 public class ProjectTaskController {
 
 	private ResponseBuilder builder;
-
-	@Autowired
 	private ProjectTaskService projectTaskService;
 	
-	@Autowired
 	private ProjectTaskRepository repository;
 
 	@PostMapping
 	public Response createTask(@RequestBody ProjectTask newTask) {
-		boolean flag = projectTaskService.createTask(newTask);
-		if(flag) {
+		
+			repository.save(newTask);
 			return builder.success(newTask);
-		}else {
-			return builder.failed(newTask); 
-		}
+		
 		
 	}
 	
@@ -57,10 +54,8 @@ public class ProjectTaskController {
 	}
 
 	@GetMapping("hours/project/{projectIdentifier}/{status}")
-	public Response AllHoursxStatus(@PathVariable("projectIdentifier") String projectIdentifier,
-			@PathVariable("status") String status) {
-		//return projectTaskService.AllHoursxStatus(projectIdentifier, status);}}
-		return null;
+	public Double AllHoursxStatus(@PathVariable("projectIdentifier") String projectIdentifier, @PathVariable("status") String status) {
+		return projectTaskService.AllHoursxStatus(projectIdentifier, status);
 	}
 
 	@PutMapping("/{idtask}/{projectIdentifier}")
