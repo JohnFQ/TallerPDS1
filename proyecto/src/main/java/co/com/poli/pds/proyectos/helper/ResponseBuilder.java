@@ -40,7 +40,8 @@ public class ResponseBuilder {
                 .build();
     }
     
-    public Response failedClean() {
+    public Response failed() {
+
     	return Response.builder()
                 .statusCode(BAD_REQUEST.value())
                 .message(BAD_REQUEST.value() +" " + HttpStatus.BAD_REQUEST.name())

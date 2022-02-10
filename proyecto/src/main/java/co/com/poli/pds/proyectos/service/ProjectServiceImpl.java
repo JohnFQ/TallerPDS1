@@ -3,20 +3,10 @@ package co.com.poli.pds.proyectos.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import co.com.poli.pds.proyectos.entity.Project;
-import co.com.poli.pds.proyectos.helper.ResponseBuilder;
-import co.com.poli.pds.proyectos.model.Response;
 import co.com.poli.pds.proyectos.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -24,37 +14,55 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @CrossOrigin
 public class ProjectServiceImpl implements ProjectService {
-	
-	private  ResponseBuilder builder;
-	
+
 	@Autowired
 	private ProjectRepository projectRepository;
-	
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public Response save(Project project) {
-    	projectRepository.save(project);
-    	return builder.success(project);
-    }
 
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public Response delete(Project project) {
-    	projectRepository.delete(project);
-    	
-    	return builder.success(project);
-    }
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public boolean save(Project project) {
+		boolean validData = true;
+		if (verificarIngesta(project)) {
+			List<Project> projectsAll = projectRepository.findAll();
+			for (Project projectValid : projectsAll) {
+				if (projectValid.getProjectIdentifier().toUpperCase()
+						.equals(project.getProjectIdentifier().toUpperCase())
+						|| projectValid.getProjectName().toUpperCase().equals(project.getProjectName().toUpperCase())) {
+					validData = false;
+				} else {
+					validData = true;
+				}
+			}
+		}
+		return validData;
+	}
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<Project> findAll() {
-        return projectRepository.findAll();
-    }
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public void delete(Project project) {
+		projectRepository.delete(project);
+	}
 
-    @Override
-    @Transactional(readOnly = true)
-    public Project findById(Long id) {
-        return projectRepository.findById(id).orElse(null);
-    }
-	
+	@Transactional(readOnly = true)
+	public List<Project> findAll() {
+		return projectRepository.findAll();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Project findById(Long id) {
+		return projectRepository.findById(id).orElse(null);
+	}
+
+	@Override
+	public boolean verificarIngesta(Project newProject) {
+		System.out.println(newProject.getProjectIdentifier());
+		if (newProject.getProjectName() == "" || newProject.getProjectIdentifier() == ""
+				|| newProject.getDescription() == "") {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
 }

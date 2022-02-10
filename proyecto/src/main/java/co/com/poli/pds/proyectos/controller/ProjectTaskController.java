@@ -1,10 +1,8 @@
 package co.com.poli.pds.proyectos.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +25,12 @@ public class ProjectTaskController {
 
 	private ResponseBuilder builder;
 	private ProjectTaskService projectTaskService;
+<<<<<<< HEAD
 	
+=======
+
+	@Autowired
+>>>>>>> devJuan
 	private ProjectTaskRepository repository;
 
 	@PostMapping
@@ -43,19 +46,42 @@ public class ProjectTaskController {
 	public List<ProjectTask> findAllProjectIdentifier(@PathVariable("projectIdentifier") String project){
 		return repository.findByProjectIdentifier(project);
 	}
+
 	@GetMapping
 	public List<ProjectTask> findAll() {
 		return projectTaskService.findAll();
 	}
-	
+
+
+	@GetMapping("/project/{projectIdentifier}")
+	public List<ProjectTask> viewAllTaskProject(@PathVariable("projectIdentifier") String projectIdentifier) {
+		return projectTaskService.viewAllTaskProject(projectIdentifier);
+	}
+
 	@GetMapping("hours/project/{projectIdentifier}")
-	public Double allHoursProject(@PathVariable("projectIdentifier") String projectIdentifier) {
-		return projectTaskService.allHoursProject(projectIdentifier);
+	public Response allHoursProject(@PathVariable("projectIdentifier") String projectIdentifier) {
+		List<ProjectTask> projects = projectTaskService.findAll();
+		for (ProjectTask projectTaskIdentifier : projects) {
+			if (this.verificarStatus(projectTaskIdentifier.getStatus())
+					&& projectTaskIdentifier.getStatus() != "deleted") {
+				Double contTasks = projectTaskIdentifier.getHours();
+				contTasks += contTasks;
+				return builder.succes(contTasks);
+			}
+		}
+
+		return builder.failed();
 	}
 
 	@GetMapping("hours/project/{projectIdentifier}/{status}")
+<<<<<<< HEAD
 	public Double AllHoursxStatus(@PathVariable("projectIdentifier") String projectIdentifier, @PathVariable("status") String status) {
 		return projectTaskService.AllHoursxStatus(projectIdentifier, status);
+=======
+	public double AllHoursxStatus(@PathVariable("projectIdentifier") String projectIdentifier, @PathVariable("status") String status) {
+		return projectTaskService.AllHoursxStatus(projectIdentifier, status);
+
+>>>>>>> devJuan
 	}
 
 	@PutMapping("/{idtask}/{projectIdentifier}")
@@ -73,4 +99,24 @@ public class ProjectTaskController {
 		return builder.failed(borradoLogico);
 	}
 
+	private boolean verificarIngesta(ProjectTask validate) {
+		if (validate.getName() == "" || validate.getProjectIdentifier() == "" || validate.getSumary() == ""
+				|| validate.getStatus() == "") {
+			return false;
+		} else if (validate.getPriority() >= 1 && validate.getPriority() <= 5 && validate.getHours() >= 1
+				&& validate.getHours() <= 8) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private boolean verificarStatus(String nameStatus) {
+		if (nameStatus != "Not Started" || nameStatus != "in progress" || nameStatus != "completed"
+				|| nameStatus != "deleted") {
+			return false;
+		} else {
+			return true;
+		}
+	}
 }
