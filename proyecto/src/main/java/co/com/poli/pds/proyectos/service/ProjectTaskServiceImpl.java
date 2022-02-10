@@ -22,12 +22,12 @@ public class ProjectTaskServiceImpl implements ProjectTaskService{
 	@Autowired
 	private ProjectTaskRepository projectTaskRepository;
 	
-	
+
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public boolean createTask(ProjectTask newTask) {
 			if(this.verificarIngesta(newTask) && !this.verificarStatus(newTask.getStatus())) {
-				//projectTaskRepository.save(newTask); 
+				projectTaskRepository.save(newTask); 
 				return true;
 			}else {
 				return false;
@@ -40,14 +40,25 @@ public class ProjectTaskServiceImpl implements ProjectTaskService{
 	public Double allHoursProject(String projectIdentifier) {
 			List<ProjectTask> projects = projectTaskRepository.findByProjectIdentifier(projectIdentifier);
 <<<<<<< HEAD
+<<<<<<< HEAD
 			Double contFlag = 0D;
+=======
+			Double contTasks = 0D, contFlag = 0D;
+			Double vectHours[];
+			vectHours = new Double[projects.size()];
+>>>>>>> parent of df29d2c (Arreglar createTask)
 			for(ProjectTask projectTaskIdentifier : projects) {
-				if(!projectTaskIdentifier.getStatus().equals("deleted")) {
-					Double contHoras = projectTaskIdentifier.getHours();
-					contFlag = contFlag + contHoras;
+				System.out.println(this.verificarStatus(projectTaskIdentifier.getStatus()));
+				if(this.verificarStatus(projectTaskIdentifier.getStatus())&& projectTaskIdentifier.getStatus() != "deleted") {
+					for(int i=0; i < vectHours.length; i++) {
+						vectHours[i] = projectTaskIdentifier.getHours();
+						contFlag = vectHours[i];
+						contTasks = contTasks + contFlag;
+					}
 				}
 			}
 			
+<<<<<<< HEAD
 		return contFlag;
 =======
 			Double contTasks = 0D, contFlag = 0D;
@@ -68,22 +79,24 @@ public class ProjectTaskServiceImpl implements ProjectTaskService{
 			
 		return contTasks;
 >>>>>>> devJuan
+=======
+		return Math.round((contTasks/projects.size())*100.0)/100.0 ;
+>>>>>>> parent of df29d2c (Arreglar createTask)
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public Double AllHoursxStatus(String projectIdentifier, String status) {
 		List<ProjectTask> projectTaskList = projectTaskRepository.findByProjectIdentifier(projectIdentifier);
-		Double contTasks = 0D, contFlag = 0D;
+		Double contTasks = 0D;
 		if(!this.verificarStatus(status)) {
 			for(ProjectTask tasks : projectTaskList) {
-				if(tasks.getStatus().equals(status)) {
-					contTasks = tasks.getHours();
-					contFlag = contFlag +  contTasks;
-				}
+				contTasks = tasks.getHours();
+				contTasks += contTasks;
+				return contTasks;
 			}
 		}
-		return contFlag;
+		return contTasks;
 	}
 	
 	@Override
