@@ -4,15 +4,23 @@ import java.util.Date;
 import java.util.Objects;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Setter
 @Getter
 @Entity
 @Table(name = "projects")
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class Project {
 	
@@ -40,7 +48,8 @@ public class Project {
 	private Date endDate;
 	
 
-	@OneToOne(mappedBy = "project", cascade = CascadeType.PERSIST)
+	@OneToOne(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JsonManagedReference
 	private BackLog backLog;
 	
 	@Override

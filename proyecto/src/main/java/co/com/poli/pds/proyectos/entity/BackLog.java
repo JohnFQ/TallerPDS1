@@ -1,20 +1,26 @@
 package co.com.poli.pds.proyectos.entity;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "backlogs")
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class BackLog {
 
@@ -27,7 +33,8 @@ public class BackLog {
 	@Column(name = "identifier")
 	private String identifier;
 	
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY, optional = false)
+	@JsonBackReference
 	@JoinColumn(name = "project_id")
 	private Project project;
 	
