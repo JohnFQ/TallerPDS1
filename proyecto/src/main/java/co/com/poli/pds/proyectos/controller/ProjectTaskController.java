@@ -2,7 +2,10 @@ package co.com.poli.pds.proyectos.controller;
 
 import java.util.List;
 
+<<<<<<< HEAD
 import org.springframework.beans.factory.annotation.Autowired;
+=======
+>>>>>>> 4565123 (Unificacion del Projecto)
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,11 +24,16 @@ import co.com.poli.pds.proyectos.service.ProjectTaskService;
 @RequestMapping("/task")
 public class ProjectTaskController {
 
+<<<<<<< HEAD
 	private ResponseBuilder builder;
 
 	@Autowired
 	private ProjectTaskService projectTaskService;
 <<<<<<< HEAD
+=======
+	private final ResponseBuilder builder;
+	private final ProjectTaskService projectTaskService;
+>>>>>>> 4565123 (Unificacion del Projecto)
 	
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -43,6 +51,7 @@ public class ProjectTaskController {
 
 	@PostMapping
 	public Response createTask(@RequestBody ProjectTask newTask) {
+<<<<<<< HEAD
 		boolean flag = projectTaskService.createTask(newTask);
 		if(flag) {
 			return builder.success(newTask);
@@ -50,6 +59,15 @@ public class ProjectTaskController {
 			return builder.failed(newTask); 
 		}
 		
+=======
+			boolean flag =projectTaskService.createTask(newTask);
+			if(flag) {
+				return builder.success(newTask);
+			}else {
+				return builder.failed(newTask);
+			}
+		  
+>>>>>>> 4565123 (Unificacion del Projecto)
 	}
 	
 	@GetMapping("/identifier/{projectIdentifier}")

@@ -17,7 +17,7 @@ import co.com.poli.pds.proyectos.repository.ProjectTaskRepository;
 public class ProjectTaskServiceImpl implements ProjectTaskService{
 	
 	
-	private  ResponseBuilder builder;
+private  ResponseBuilder builder;
 	
 	@Autowired
 	private ProjectTaskRepository projectTaskRepository;
@@ -136,13 +136,16 @@ public class ProjectTaskServiceImpl implements ProjectTaskService{
 	
 	private boolean verificarIngesta(ProjectTask validate) {
 		if(validate.getName() == "" || validate.getProjectIdentifier() == "" || validate.getSumary() == "" ||
-				validate.getStatus() == "") {
+				validate.getStatus() == "" ) {
 			return false;
-		}else if(validate.getPriority()>= 1 || validate.getPriority() <= 5 && validate.getHours() >=1 || validate.getHours() <= 8){
+		}
+		
+		if(validate.getPriority()>= 1 && validate.getPriority() <= 5 && validate.getHours() >=1D && validate.getHours() <= 8D){
 			return true;
 		}else {
 			return false;
 		}
+		
 	}
 	
 	private boolean verificarStatus(String nameStatus) {
