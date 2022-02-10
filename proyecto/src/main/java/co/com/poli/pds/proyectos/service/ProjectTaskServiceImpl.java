@@ -53,18 +53,20 @@ public class ProjectTaskServiceImpl implements ProjectTaskService{
 	public Double allHoursProject(String projectIdentifier) {
 			List<ProjectTask> projects = projectTaskRepository.findByProjectIdentifier(projectIdentifier);
 			Double contTasks = 0D, contFlag = 0D;
+			Double vectHours[];
+			vectHours = new Double[projects.size()];
 			for(ProjectTask projectTaskIdentifier : projects) {
-				if(!this.verificarStatus(projectTaskIdentifier.getStatus()) && projectTaskIdentifier.getStatus() != "deleted") {
-					contTasks = projectTaskIdentifier.getHours();
-					
+				System.out.println(this.verificarStatus(projectTaskIdentifier.getStatus()));
+				if(this.verificarStatus(projectTaskIdentifier.getStatus())&& projectTaskIdentifier.getStatus() != "deleted") {
+					for(int i=0; i < vectHours.length; i++) {
+						vectHours[i] = projectTaskIdentifier.getHours();
+						contFlag = vectHours[i];
+						contTasks = contTasks + contFlag;
+					}
 				}
-				
 			}
-				
 			
-			
-			
-		return contTasks;
+		return Math.round((contTasks/projects.size())*100.0)/100.0 ;
 	}
 
 	@Override
