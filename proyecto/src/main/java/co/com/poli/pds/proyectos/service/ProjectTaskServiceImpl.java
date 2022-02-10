@@ -13,11 +13,20 @@ import co.com.poli.pds.proyectos.model.Response;
 import co.com.poli.pds.proyectos.repository.ProjectTaskRepository;
 
 @Service
+<<<<<<< HEAD
 @CrossOrigin // Para manejar las solicitudes cruzadas que provienen del navegador del cliente
 public class ProjectTaskServiceImpl implements ProjectTaskService {
 
 	private ResponseBuilder builder;
 
+=======
+@CrossOrigin //Para manejar las solicitudes cruzadas que provienen del navegador del cliente
+public class ProjectTaskServiceImpl implements ProjectTaskService{
+	
+	
+private  ResponseBuilder builder;
+	
+>>>>>>> main
 	@Autowired
 	private ProjectTaskRepository projectTaskRepository;
 
@@ -35,6 +44,7 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
 	@Override
 	@Transactional(readOnly = true)
 	public Double allHoursProject(String projectIdentifier) {
+<<<<<<< HEAD
 		List<ProjectTask> projects = projectTaskRepository.findByProjectIdentifier(projectIdentifier);
 		Double contFlag = 0D;
 		for (ProjectTask projectTaskIdentifier : projects) {
@@ -45,6 +55,62 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
 		}
 
 		return contFlag;
+=======
+			List<ProjectTask> projects = projectTaskRepository.findByProjectIdentifier(projectIdentifier);
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+			Double contFlag = 0D;
+=======
+			Double contTasks = 0D, contFlag = 0D;
+			Double vectHours[];
+			vectHours = new Double[projects.size()];
+>>>>>>> parent of df29d2c (Arreglar createTask)
+=======
+			Double contTasks = 0D, contFlag = 0D;
+			Double vectHours[];
+			vectHours = new Double[projects.size()];
+>>>>>>> parent of df29d2c (Arreglar createTask)
+			for(ProjectTask projectTaskIdentifier : projects) {
+				System.out.println(this.verificarStatus(projectTaskIdentifier.getStatus()));
+				if(this.verificarStatus(projectTaskIdentifier.getStatus())&& projectTaskIdentifier.getStatus() != "deleted") {
+					for(int i=0; i < vectHours.length; i++) {
+						vectHours[i] = projectTaskIdentifier.getHours();
+						contFlag = vectHours[i];
+						contTasks = contTasks + contFlag;
+					}
+				}
+			}
+			
+<<<<<<< HEAD
+<<<<<<< HEAD
+		return contFlag;
+=======
+			Double contTasks = 0D, contFlag = 0D;
+			Double vectHours[];
+			vectHours = new Double[projects.size()];
+			
+			for(ProjectTask projectTaskIdentifier : projects) {
+				System.out.println(projects.size());
+				if(!this.verificarStatus(projectTaskIdentifier.getStatus()) && projectTaskIdentifier.getStatus() != "deleted") {
+					contTasks = projectTaskIdentifier.getHours();
+					System.out.println(contTasks);
+				}
+				contFlag = contTasks;
+			}
+				
+			
+			System.out.println("contFlag" + contFlag);
+			
+		return contTasks;
+>>>>>>> devJuan
+=======
+		return Math.round((contTasks/projects.size())*100.0)/100.0 ;
+>>>>>>> parent of df29d2c (Arreglar createTask)
+=======
+		return Math.round((contTasks/projects.size())*100.0)/100.0 ;
+>>>>>>> parent of df29d2c (Arreglar createTask)
+>>>>>>> main
 	}
 
 	@Override
@@ -89,6 +155,7 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
 	}
 
 	private boolean verificarIngesta(ProjectTask validate) {
+<<<<<<< HEAD
 		if (validate.getName() == "" || validate.getProjectIdentifier() == "" || validate.getSumary() == ""
 				|| validate.getStatus() == "") {
 			return false;
@@ -96,11 +163,23 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
 
 		if (validate.getPriority() >= 1 && validate.getPriority() <= 5 && validate.getHours() >= 1D
 				&& validate.getHours() <= 8D) {
+=======
+		if(validate.getName() == "" || validate.getProjectIdentifier() == "" || validate.getSumary() == "" ||
+				validate.getStatus() == "" ) {
+			return false;
+		}
+		
+		if(validate.getPriority()>= 1 && validate.getPriority() <= 5 && validate.getHours() >=1D && validate.getHours() <= 8D){
+>>>>>>> main
 			return true;
 		} else {
 			return false;
 		}
+<<<<<<< HEAD
 
+=======
+		
+>>>>>>> main
 	}
 
 	private boolean verificarStatus(String nameStatus) {
