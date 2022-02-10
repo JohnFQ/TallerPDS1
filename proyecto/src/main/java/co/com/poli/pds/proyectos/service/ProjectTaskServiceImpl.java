@@ -12,6 +12,7 @@ import co.com.poli.pds.proyectos.helper.ResponseBuilder;
 import co.com.poli.pds.proyectos.model.Response;
 import co.com.poli.pds.proyectos.repository.ProjectTaskRepository;
 
+
 @Service
 @CrossOrigin //Para manejar las solicitudes cruzadas que provienen del navegador del cliente
 public class ProjectTaskServiceImpl implements ProjectTaskService{
@@ -22,12 +23,12 @@ public class ProjectTaskServiceImpl implements ProjectTaskService{
 	@Autowired
 	private ProjectTaskRepository projectTaskRepository;
 	
-
+	
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public boolean createTask(ProjectTask newTask) {
 			if(this.verificarIngesta(newTask) && !this.verificarStatus(newTask.getStatus())) {
-				projectTaskRepository.save(newTask); 
+				//projectTaskRepository.save(newTask); 
 				return true;
 			}else {
 				return false;
@@ -39,38 +40,31 @@ public class ProjectTaskServiceImpl implements ProjectTaskService{
 	@Transactional(readOnly = true)
 	public Double allHoursProject(String projectIdentifier) {
 			List<ProjectTask> projects = projectTaskRepository.findByProjectIdentifier(projectIdentifier);
-			Double contTasks = 0D, contFlag = 0D;
-			Double vectHours[];
-			vectHours = new Double[projects.size()];
-			
+			Double contFlag = 0D;
 			for(ProjectTask projectTaskIdentifier : projects) {
-				System.out.println(projects.size());
-				if(!this.verificarStatus(projectTaskIdentifier.getStatus()) && projectTaskIdentifier.getStatus() != "deleted") {
-					contTasks = projectTaskIdentifier.getHours();
-					System.out.println(contTasks);
+				if(!projectTaskIdentifier.getStatus().equals("deleted")) {
+					Double contHoras = projectTaskIdentifier.getHours();
+					contFlag = contFlag + contHoras;
 				}
-				contFlag = contTasks;
 			}
-				
 			
-			System.out.println("contFlag" + contFlag);
-			
-		return contTasks;
+		return contFlag;
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public Double AllHoursxStatus(String projectIdentifier, String status) {
 		List<ProjectTask> projectTaskList = projectTaskRepository.findByProjectIdentifier(projectIdentifier);
-		Double contTasks = 0D;
+		Double contTasks = 0D, contFlag = 0D;
 		if(!this.verificarStatus(status)) {
 			for(ProjectTask tasks : projectTaskList) {
-				contTasks = tasks.getHours();
-				contTasks += contTasks;
-				return contTasks;
+				if(tasks.getStatus().equals(status)) {
+					contTasks = tasks.getHours();
+					contFlag = contFlag +  contTasks;
+				}
 			}
 		}
-		return contTasks;
+		return contFlag;
 	}
 	
 	@Override

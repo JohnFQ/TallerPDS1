@@ -1,8 +1,6 @@
 package co.com.poli.pds.proyectos.controller;
 
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,65 +14,44 @@ import co.com.poli.pds.proyectos.helper.ResponseBuilder;
 import co.com.poli.pds.proyectos.model.Response;
 import co.com.poli.pds.proyectos.repository.ProjectTaskRepository;
 import co.com.poli.pds.proyectos.service.ProjectTaskService;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/task")
+@RequiredArgsConstructor
 public class ProjectTaskController {
 
 	private ResponseBuilder builder;
-
-	@Autowired
 	private ProjectTaskService projectTaskService;
-
-	@Autowired
+	
 	private ProjectTaskRepository repository;
 
 	@PostMapping
 	public Response createTask(@RequestBody ProjectTask newTask) {
-		boolean flag = projectTaskService.createTask(newTask);
-		if(flag) {
-			return builder.success(newTask);
-		}else {
-			return builder.failed(newTask); 
-		}
 		
+			repository.save(newTask);
+			return builder.success(newTask);
+		
+		  
 	}
 	
 	@GetMapping("/identifier/{projectIdentifier}")
 	public List<ProjectTask> findAllProjectIdentifier(@PathVariable("projectIdentifier") String project){
 		return repository.findByProjectIdentifier(project);
 	}
-
 	@GetMapping
 	public List<ProjectTask> findAll() {
 		return projectTaskService.findAll();
 	}
-
-
-	@GetMapping("/project/{projectIdentifier}")
-	public List<ProjectTask> viewAllTaskProject(@PathVariable("projectIdentifier") String projectIdentifier) {
-		return projectTaskService.viewAllTaskProject(projectIdentifier);
-	}
-
+	
 	@GetMapping("hours/project/{projectIdentifier}")
-	public Response allHoursProject(@PathVariable("projectIdentifier") String projectIdentifier) {
-		List<ProjectTask> projects = projectTaskService.findAll();
-		for (ProjectTask projectTaskIdentifier : projects) {
-			if (this.verificarStatus(projectTaskIdentifier.getStatus())
-					&& projectTaskIdentifier.getStatus() != "deleted") {
-				Double contTasks = projectTaskIdentifier.getHours();
-				contTasks += contTasks;
-				return builder.succes(contTasks);
-			}
-		}
-
-		return builder.failed();
+	public Double allHoursProject(@PathVariable("projectIdentifier") String projectIdentifier) {
+		return projectTaskService.allHoursProject(projectIdentifier);
 	}
 
 	@GetMapping("hours/project/{projectIdentifier}/{status}")
-	public double AllHoursxStatus(@PathVariable("projectIdentifier") String projectIdentifier, @PathVariable("status") String status) {
+	public Double AllHoursxStatus(@PathVariable("projectIdentifier") String projectIdentifier, @PathVariable("status") String status) {
 		return projectTaskService.AllHoursxStatus(projectIdentifier, status);
-
 	}
 
 	@PutMapping("/{idtask}/{projectIdentifier}")
@@ -92,24 +69,4 @@ public class ProjectTaskController {
 		return builder.failed(borradoLogico);
 	}
 
-	private boolean verificarIngesta(ProjectTask validate) {
-		if (validate.getName() == "" || validate.getProjectIdentifier() == "" || validate.getSumary() == ""
-				|| validate.getStatus() == "") {
-			return false;
-		} else if (validate.getPriority() >= 1 && validate.getPriority() <= 5 && validate.getHours() >= 1
-				&& validate.getHours() <= 8) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	private boolean verificarStatus(String nameStatus) {
-		if (nameStatus != "Not Started" || nameStatus != "in progress" || nameStatus != "completed"
-				|| nameStatus != "deleted") {
-			return false;
-		} else {
-			return true;
-		}
-	}
 }
