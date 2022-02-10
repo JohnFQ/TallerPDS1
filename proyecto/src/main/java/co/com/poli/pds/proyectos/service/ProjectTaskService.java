@@ -2,8 +2,6 @@ package co.com.poli.pds.proyectos.service;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
-
 import co.com.poli.pds.proyectos.entity.ProjectTask;
 import co.com.poli.pds.proyectos.model.Response;
 
@@ -17,7 +15,7 @@ public interface ProjectTaskService {
 	
 	Double AllHoursxStatus(String projectIdentifier, String status);
 	
-	Response changeStatusTask(Long idTask, String projectIdentifier);
+	boolean changeStatusTask(Long idTask, String projectIdentifier);
 	
 	List<ProjectTask> findAll(); 
 }

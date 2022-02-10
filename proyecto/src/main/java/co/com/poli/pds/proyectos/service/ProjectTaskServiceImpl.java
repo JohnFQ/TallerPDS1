@@ -4,33 +4,18 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import co.com.poli.pds.proyectos.entity.BackLog;
 import co.com.poli.pds.proyectos.entity.ProjectTask;
 import co.com.poli.pds.proyectos.helper.ResponseBuilder;
 import co.com.poli.pds.proyectos.model.Response;
-import co.com.poli.pds.proyectos.repository.BackLogRepository;
 import co.com.poli.pds.proyectos.repository.ProjectTaskRepository;
-import lombok.RequiredArgsConstructor;
 
 @Service
 @CrossOrigin //Para manejar las solicitudes cruzadas que provienen del navegador del cliente
 public class ProjectTaskServiceImpl implements ProjectTaskService{
-	
-	
-	private  ResponseBuilder builder;
+private  ResponseBuilder builder;
 	
 	@Autowired
 	private ProjectTaskRepository projectTaskRepository;
@@ -40,7 +25,7 @@ public class ProjectTaskServiceImpl implements ProjectTaskService{
 	@Transactional(rollbackFor = Exception.class)
 	public boolean createTask(ProjectTask newTask) {
 			if(this.verificarIngesta(newTask) && !this.verificarStatus(newTask.getStatus())) {
-				//projectTaskRepository.save(newTask); 
+				projectTaskRepository.save(newTask); 
 				return true;
 			}else {
 				return false;
@@ -93,26 +78,29 @@ public class ProjectTaskServiceImpl implements ProjectTaskService{
 	
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public Response changeStatusTask(Long idTask,String projectIdentifier) {
+	public boolean changeStatusTask(Long idTask,String projectIdentifier) {
 		Optional<ProjectTask> borradoLogico = projectTaskRepository.findById(idTask);
 		
 		if(borradoLogico.isPresent() && borradoLogico.get().getProjectIdentifier().equals(projectIdentifier)) {
 			borradoLogico.get().setStatus("deleted");
-			return builder.success(borradoLogico);
+			return true;
 		}else {
-			return builder.failed(borradoLogico);
+			return false;
 		}
 	}
 	
 	private boolean verificarIngesta(ProjectTask validate) {
 		if(validate.getName() == "" || validate.getProjectIdentifier() == "" || validate.getSumary() == "" ||
-				validate.getStatus() == "") {
+				validate.getStatus() == "" ) {
 			return false;
-		}else if(validate.getPriority()>= 1 || validate.getPriority() <= 5 && validate.getHours() >=1 || validate.getHours() <= 8){
+		}
+		
+		if(validate.getPriority()>= 1 && validate.getPriority() <= 5 && validate.getHours() >=1D && validate.getHours() <= 8D){
 			return true;
 		}else {
 			return false;
 		}
+		
 	}
 	
 	private boolean verificarStatus(String nameStatus) {
@@ -122,5 +110,4 @@ public class ProjectTaskServiceImpl implements ProjectTaskService{
 			return true;
 		}
 	}
-
 }

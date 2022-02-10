@@ -25,17 +25,19 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProjectTaskController {
 
-	private ResponseBuilder builder;
-	private ProjectTaskService projectTaskService;
+	private final ResponseBuilder builder;
+	private final ProjectTaskService projectTaskService;
 	
 	private ProjectTaskRepository repository;
 
 	@PostMapping
 	public Response createTask(@RequestBody ProjectTask newTask) {
-		
-			repository.save(newTask);
-			return builder.success(newTask);
-		
+			boolean flag =projectTaskService.createTask(newTask);
+			if(flag) {
+				return builder.success(newTask);
+			}else {
+				return builder.failed(newTask);
+			}
 		  
 	}
 	
@@ -60,17 +62,12 @@ public class ProjectTaskController {
 
 	@PutMapping("/{idtask}/{projectIdentifier}")
 	public Response changeStatusTask(@PathVariable("idtask") Long idTask, @PathVariable("projectIdentifier") String projectIdentifier) {
-		List<ProjectTask> borradoLogico = projectTaskService.findAll();
-
-		for (ProjectTask prjs : borradoLogico) {
-			if (prjs.getId() == idTask && prjs.getProjectIdentifier() == projectIdentifier) {
-				prjs.setStatus("deleted");
-				return builder.success(borradoLogico);
-			} else {
-				return builder.failed(borradoLogico);
-			}
+		boolean flag = projectTaskService.changeStatusTask(idTask, projectIdentifier);
+		if(flag) {
+			return builder.changeStatus();
+		}else {
+			return builder.failed();
 		}
-		return builder.failed(borradoLogico);
 	}
 
 }
