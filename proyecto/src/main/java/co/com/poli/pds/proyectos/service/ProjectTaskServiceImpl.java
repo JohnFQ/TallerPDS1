@@ -41,7 +41,13 @@ public class ProjectTaskServiceImpl implements ProjectTaskService{
 			List<ProjectTask> projects = projectTaskRepository.findByProjectIdentifier(projectIdentifier);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 			Double contFlag = 0D;
+=======
+			Double contTasks = 0D, contFlag = 0D;
+			Double vectHours[];
+			vectHours = new Double[projects.size()];
+>>>>>>> parent of df29d2c (Arreglar createTask)
 =======
 			Double contTasks = 0D, contFlag = 0D;
 			Double vectHours[];
@@ -58,6 +64,7 @@ public class ProjectTaskServiceImpl implements ProjectTaskService{
 				}
 			}
 			
+<<<<<<< HEAD
 <<<<<<< HEAD
 		return contFlag;
 =======
@@ -79,6 +86,9 @@ public class ProjectTaskServiceImpl implements ProjectTaskService{
 			
 		return contTasks;
 >>>>>>> devJuan
+=======
+		return Math.round((contTasks/projects.size())*100.0)/100.0 ;
+>>>>>>> parent of df29d2c (Arreglar createTask)
 =======
 		return Math.round((contTasks/projects.size())*100.0)/100.0 ;
 >>>>>>> parent of df29d2c (Arreglar createTask)

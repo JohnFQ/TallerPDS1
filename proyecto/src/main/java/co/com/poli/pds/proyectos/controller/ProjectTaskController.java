@@ -28,10 +28,14 @@ public class ProjectTaskController {
 <<<<<<< HEAD
 	
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 	@Autowired
 >>>>>>> devJuan
+=======
+	@Autowired
+>>>>>>> parent of df29d2c (Arreglar createTask)
 =======
 	@Autowired
 >>>>>>> parent of df29d2c (Arreglar createTask)
@@ -82,6 +86,7 @@ public class ProjectTaskController {
 	@GetMapping("hours/project/{projectIdentifier}/{status}")
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	public Double AllHoursxStatus(@PathVariable("projectIdentifier") String projectIdentifier, @PathVariable("status") String status) {
 		return projectTaskService.AllHoursxStatus(projectIdentifier, status);
 =======
@@ -90,10 +95,15 @@ public class ProjectTaskController {
 
 >>>>>>> devJuan
 =======
+=======
+>>>>>>> parent of df29d2c (Arreglar createTask)
 	public Response AllHoursxStatus(@PathVariable("projectIdentifier") String projectIdentifier,
 			@PathVariable("status") String status) {
 		//return projectTaskService.AllHoursxStatus(projectIdentifier, status);}}
 		return null;
+<<<<<<< HEAD
+>>>>>>> parent of df29d2c (Arreglar createTask)
+=======
 >>>>>>> parent of df29d2c (Arreglar createTask)
 	}
 
