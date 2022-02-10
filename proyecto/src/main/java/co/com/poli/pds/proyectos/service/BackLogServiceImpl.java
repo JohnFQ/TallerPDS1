@@ -22,32 +22,44 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @CrossOrigin // Para manejar las solicitudes cruzadas que provienen del navegador del cliente
 public class BackLogServiceImpl implements BackLogService {
-	
+
 	@Autowired
 	private BackLogRepository backLogRepository;
-	
+
 	@Autowired
 	private ProjectTaskRepository projectTaskRepository;
-	
+
 	@Autowired
 	private ProjectRepository projectRepository;
-	
+
 	@Override
-	public boolean save(BackLog backlog) {
-		backLogRepository.save(backlog);
-		return true;
+	public int save(BackLog backlog) {
+		int cont = 0;
+		if (verificarIngesta(backlog)) {
+			List<BackLog> backlogsAll = backLogRepository.findAll();
+			for (BackLog backlogValid : backlogsAll) {
+				System.out.print(backlogValid.getProject().getId());
+				System.out.print(backlog.getProject().getId());
+				if (backlogValid.getIdentifier().toUpperCase().equals(backlog.getIdentifier().toUpperCase())
+						|| backlogValid.getProject().getId() == backlog.getProject().getId()) {
+					cont = cont + 1;
+				}
+			}
+		}
+		cont = 1;
+		return cont;
 	}
 
 	@Override
 	public void delete(BackLog backlog) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public List<BackLog> findAll() {
 		return backLogRepository.findAll();
-		
+
 	}
 
 	@Override
@@ -55,14 +67,13 @@ public class BackLogServiceImpl implements BackLogService {
 	public BackLog findById(Long id) {
 		return backLogRepository.findById(id).orElse(null);
 	}
-/*
-	private boolean verificarExistenciaProject(Long idBackLog, Long idProject) {
-		Optional<Project> projects = projectRepository.findById(idProject);
-		if(projects.isPresent()) {
-			if(projects.get().getBackLog() == null) {
-				projects.get().;
-			}
+
+	@Override
+	public boolean verificarIngesta(BackLog newBackLog) {
+		if (newBackLog.getIdentifier().equals("") || newBackLog.getProject().getId() == null) {
+			return false;
+		} else {
+			return true;
 		}
 	}
-	*/
 }

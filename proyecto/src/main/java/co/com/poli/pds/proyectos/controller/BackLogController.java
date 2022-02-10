@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import co.com.poli.pds.proyectos.entity.BackLog;
 import co.com.poli.pds.proyectos.helper.ResponseBuilder;
 import co.com.poli.pds.proyectos.model.Response;
+import co.com.poli.pds.proyectos.repository.BackLogRepository;
 import co.com.poli.pds.proyectos.repository.ProjectRepository;
 import co.com.poli.pds.proyectos.service.BackLogService;
 import co.com.poli.pds.proyectos.service.ProjectService;
@@ -24,14 +25,16 @@ import lombok.RequiredArgsConstructor;
 public class BackLogController {
 	
 	private final BackLogService backLogService;
-	
+	private final BackLogRepository backlogRepository;
 	
 	private final ResponseBuilder builder;
 	
 	@PostMapping
 	public Response createBackLog(@RequestBody BackLog newBackLog){
-		boolean flag = backLogService.save(newBackLog);
-		if(flag) {
+		int flag = backLogService.save(newBackLog);
+		System.out.print(flag);
+		if(flag == 0) {
+			backlogRepository.save(newBackLog);
 			return builder.success(newBackLog);
 		}else {
 			return builder.failed();

@@ -33,8 +33,8 @@ public class BackLog {
 	@Column(name = "identifier")
 	private String identifier;
 	
-	@OneToOne(fetch = FetchType.LAZY, optional = false)
-	@JsonBackReference
+	@OneToOne(fetch = FetchType.LAZY)
+	
 	@JoinColumn(name = "project_id")
 	private Project project;
 	

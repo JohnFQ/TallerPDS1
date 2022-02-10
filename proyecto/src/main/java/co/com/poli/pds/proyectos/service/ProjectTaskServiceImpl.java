@@ -11,15 +11,19 @@ import co.com.poli.pds.proyectos.entity.ProjectTask;
 import co.com.poli.pds.proyectos.helper.ResponseBuilder;
 import co.com.poli.pds.proyectos.model.Response;
 import co.com.poli.pds.proyectos.repository.ProjectTaskRepository;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @CrossOrigin //Para manejar las solicitudes cruzadas que provienen del navegador del cliente
+@RequiredArgsConstructor
 public class ProjectTaskServiceImpl implements ProjectTaskService{
 private  ResponseBuilder builder;
 	
 	@Autowired
 	private ProjectTaskRepository projectTaskRepository;
 	
+	public ProjectTaskServiceImpl(ProjectTaskRepository projectTaskRepository) {
+	}
 	
 	@Override
 	@Transactional(rollbackFor = Exception.class)

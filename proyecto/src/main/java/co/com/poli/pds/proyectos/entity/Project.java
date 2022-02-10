@@ -49,7 +49,6 @@ public class Project {
 	
 
 	@OneToOne(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JsonManagedReference
 	private BackLog backLog;
 	
 	@Override

@@ -9,9 +9,10 @@ public interface BackLogService {
 //	ResponseEntity<BackLog> createBackLog(BackLog newBackLog);
 //	List<BackLog> consultarBackLog();
 	
-	boolean save(BackLog backlog);
+	int save(BackLog backlog);
     void delete(BackLog backlog);
     List<BackLog> findAll();
     BackLog findById(Long id);
+    boolean verificarIngesta(BackLog newBackLog);
 	
 }
