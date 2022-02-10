@@ -1,6 +1,7 @@
 package co.com.poli.pds.proyectos.controller;
 
 import java.util.List;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,17 +22,19 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProjectTaskController {
 
-	private ResponseBuilder builder;
-	private ProjectTaskService projectTaskService;
+	private final ResponseBuilder builder;
+	private final ProjectTaskService projectTaskService;
 	
 	private ProjectTaskRepository repository;
 
 	@PostMapping
 	public Response createTask(@RequestBody ProjectTask newTask) {
-		
-			repository.save(newTask);
-			return builder.success(newTask);
-		
+			boolean flag =projectTaskService.createTask(newTask);
+			if(flag) {
+				return builder.success(newTask);
+			}else {
+				return builder.failed(newTask);
+			}
 		  
 	}
 	
